@@ -34,7 +34,14 @@ const datas = [
     icon: "phone-portrait",
     bg: "#477EEA",
     types: "10"
-  }
+  },
+  {
+    name: "Remedios",
+    route: "RemediosIndex",
+    icon: "phone-portrait",
+    bg: "#477EEA",
+    types: "10"
+  },
 ];
 
 class SideBar extends Component {

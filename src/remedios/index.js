@@ -19,10 +19,11 @@ import {
     Grid,
     Col,
     Row,
-    H3
+    H3,
+    Title
   } from "native-base";
 
-const data =  [{id: 1, name: "remedio 01", bull: "", dateStart: new Date('2018-01-03'), dateEnd: new Date('2018-01-15'), hours: ["15:00"]}];
+const data =  [{id: 1, name: "remedio 01", bull: "", dateStart: new Date('2018-01-03'), dateEnd: new Date('2018-01-15'), hour: "15:00", days:["seg ", "ter "]}];
 
 export default class RemediosIndex extends Component {
     
@@ -45,7 +46,7 @@ export default class RemediosIndex extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Text>Remedios</Text>
+                        <Title>Remedios</Title>
                     </Body>    
                     <Right />    
                 </Header> 

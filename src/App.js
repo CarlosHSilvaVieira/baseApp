@@ -19,7 +19,12 @@ import VacinasEdit from './vacinas/edit'
 
 //Remedios Routes 
 import RemediosIndex from './remedios';
+import RemediosCreate from './remedios/create';
+import RemediosView from './remedios/view';
+import RemediosEdit from './remedios/edit'
 
+//Week
+import Week from './remedios/week';
 
 // rotas gerais
 const Drawer = DrawerNavigator(
@@ -43,7 +48,13 @@ const AppNavigator = StackNavigator(
 
     VacinasView: {screen: ViewVacinas},
     VacinasCreate: {screen: VacinasCreate},
-    VacinasEdit: {screen: VacinasEdit}
+    VacinasEdit: {screen: VacinasEdit},
+
+    Week: {screen: Week},
+
+    RemediosCreate: {screen: RemediosCreate},
+    RemediosView: {screen: RemediosView},
+    RemediosEdit: {screen: RemediosEdit}
 
 },
 {
