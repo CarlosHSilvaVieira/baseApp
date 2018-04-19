@@ -31,7 +31,10 @@ export default class Week extends Component {
         const { navigation } = props;
         navigation.goBack();
         
-        navigation.state.params.onDaysChange({days: this.state.days});
+        let vetor = this.state.days;
+        vetor.sort();
+
+        navigation.state.params.onDaysChange({days: vetor});
     }
     
     alteraVetorDias(valor, dia, todos)
@@ -54,7 +57,7 @@ export default class Week extends Component {
         {
             if(valor == true) {
 
-                this.setState({days: ["seg ", "ter ", "qua ", "qui ", "sex", "sab ", "dom "]});
+                this.setState({days: ["seg ", "ter ", "qua ", "qui ", "sex ", "sab ", "dom "]});
             } else {  
                 this.setState({days: []});
             }

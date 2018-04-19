@@ -25,7 +25,7 @@ const datas = [
   {
     name: "Doenças",
     route: "DoencasIndex",
-    icon: "easel",
+    icon: "phone-portrait",
     bg: "#C5F442"
   },
   {
@@ -39,8 +39,25 @@ const datas = [
     name: "Remedios",
     route: "RemediosIndex",
     icon: "phone-portrait",
-    bg: "#477EEA",
-    types: "10"
+    bg: "#477EEA"
+  },
+  {
+    name: "Consultas",
+    route: "ConsultasIndex",
+    icon: "phone-portrait",
+    bg: "#477EEA"
+  },
+  {
+    name: "Monitoramento",
+    route: "Monitoramento",
+    icon: "phone-portrait",
+    bg: "#477EEA"
+  },
+  {
+    name: "Perfil",
+    route: "Perfil",
+    icon: "phone-portrait",
+    bg: "#477EEA"
   },
 ];
 

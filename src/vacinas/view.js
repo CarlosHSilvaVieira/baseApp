@@ -57,25 +57,23 @@ export default class ViewVacina extends Component
                         <Icon name='arrow-back' />
                         </Button>
                     </Left>
-                    <Body>
-                        <Title>Vacina</Title>
-                    </Body>
-                    <Right />
+                    <Right>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.goBack()}
+                            >
+                            <Text>Editar</Text>
+                        </Button>
+                    </Right>
                 </Header>
                 <Grid>
                         <Row size={3} style={{ backgroundColor: '#635DB7', alignItems: 'center', justifyContent: 'center'}}>
                             <Text>{this.state.vacina.text}</Text>
                         </Row>
                         <Row size={1} style={{ backgroundColor: '#00CE9F'}}>
-                            <Col>
-                                <Button block danger style={styles.button} onPress={() => this.deletarVacina()}><Text>Deletar vacina</Text></Button>  
-                            </Col>
-                            <Col>
-                                <Button block info style={styles.button} onPress={() => this.props.navigation.navigate("VacinasEdit", {vacina: this.state.vacina})}><Text>Editar vacina</Text></Button>
-                            </Col>
                         </Row>   
                 </Grid> 
-
+                <Button block danger style={styles.button} onPress={() => this.deletarVacina()}><Text>Deletar vacina</Text></Button>  
             </Container>    
         );
     }

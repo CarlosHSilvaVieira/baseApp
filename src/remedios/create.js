@@ -50,10 +50,12 @@ export default class RemediosCreate extends Component
                         transparent
                         onPress={() => this.props.navigation.goBack()}
                         >
-                        <Text>Cancelar</Text>
+                        <Icon name="arrow-back" />
                         </Button>
                     </Left>
-                    
+                    <Body>
+                        <Title>Remedios</Title>
+                    </Body>
                     <Right>
                         <Button
                             transparent
@@ -122,7 +124,7 @@ export default class RemediosCreate extends Component
                         <List>
                             <ListItem button
                                 onPress = {() => this.props.navigation.navigate("Week", {onDaysChange: this.onDaysChange, navigation: this.props})}>
-                                <Label>Dias da medicação</Label>
+                                <Label>Dias</Label>
                                 <Input disabled><Text>{this.state.days}</Text></Input> 
                             </ListItem>    
                             <Item />

@@ -50,25 +50,25 @@ export default class DoencaView extends Component {
                         <Icon name='arrow-back' />
                         </Button>
                     </Left>
-                    <Body>
-                        <Title>Doenças</Title>
-                    </Body>
-                    <Right />
+                    <Right>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.goBack()}
+                            >
+                            <Text>Remover</Text>
+                        </Button>
+                    </Right>    
                 </Header>
                 <Grid>
                         <Row size={3} style={{ backgroundColor: '#635DB7', alignItems: 'center', justifyContent: 'center'}}>
                             <Text>{this.state.doenca.text}</Text>
                         </Row>
                         <Row size={1} style={{ backgroundColor: '#00CE9F'}}>
-                            <Col>
-                                <Button block danger style={styles.botao} onPress={() => {console.log("deletar doença")}}><Text>Deletar Doença</Text></Button>  
-                            </Col>
-                            <Col>
-                                <Button block info style={styles.botao} onPress={() => {console.log("mapa da doença")}}><Text>Mapa da Doença</Text></Button>
-                            </Col>
+                            
                         </Row>   
+                        <Button full block warning style={styles.button} onPress={() => {console.log("mapa da doença")}}><Text>Mapa da Doença</Text></Button>
                 </Grid> 
-
+                
             </Container>    
         );
     }

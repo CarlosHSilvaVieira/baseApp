@@ -50,7 +50,14 @@ export default class VacinaCreate extends Component
                     <Body>
                         <Title>Vacinas</Title>
                     </Body>
-                    <Right />
+                    <Right>
+                    <Button
+                        transparent
+                        onPress={() => this.props.navigation.goBack()}
+                        >
+                            <Text>Salvar</Text>
+                        </Button>
+                    </Right>
                 </Header>
                 <Container>
                     
@@ -77,9 +84,6 @@ export default class VacinaCreate extends Component
                             />
                         </Item>  
                     </Form>    
-                    <Button full success style={styles.button}><Text> Cadastrar </Text></Button>
-
-                    <Button full warning style={styles.button}><Text> Voltar </Text></Button>
                 </Container>    
             </Container>    
            

@@ -8,8 +8,8 @@ import Home from './home/home';
 
 //Doenças Routes
 import DoencasIndex from './doencas';
-import DoencasCreate from './doencas/doencaCreate';
-import DoencaView from './doencas/doencaView';
+import DoencasCreate from './doencas/create';
+import DoencaView from './doencas/view';
 
 //Vacinas Routes
 import VacinasIndex from './vacinas';
@@ -23,6 +23,13 @@ import RemediosCreate from './remedios/create';
 import RemediosView from './remedios/view';
 import RemediosEdit from './remedios/edit'
 
+//Consultas Routes
+import ConsultasIndex from './consultas';
+import ConsultasView from './consultas/view';
+import ConsultasCreate from './consultas/create';
+import AddDoencasConsulta from './consultas/addDoencas';
+import AddRemediosConsulta from './consultas/addRemedios';
+
 //Week
 import Week from './remedios/week';
 
@@ -32,10 +39,11 @@ const Drawer = DrawerNavigator(
     Home: {screen: Home},
     DoencasIndex: {screen: DoencasIndex},
     VacinasIndex: {screen:VacinasIndex},
-    RemediosIndex: {screen: RemediosIndex}
+    RemediosIndex: {screen: RemediosIndex},
+    ConsultasIndex: {screen: ConsultasIndex}
 },
 {
-    initialRouteName: "RemediosIndex",
+    initialRouteName: "Home",
     contentComponent: props => <SideBar {...props} />
 });
 
@@ -54,7 +62,12 @@ const AppNavigator = StackNavigator(
 
     RemediosCreate: {screen: RemediosCreate},
     RemediosView: {screen: RemediosView},
-    RemediosEdit: {screen: RemediosEdit}
+    RemediosEdit: {screen: RemediosEdit},
+
+    ConsultasView: {screen: ConsultasView},
+    ConsultasCreate: {screen: ConsultasCreate},
+    AddDoencasConsulta: {screen: AddDoencasConsulta},
+    AddRemediosConsulta: {screen: AddRemediosConsulta}
 
 },
 {

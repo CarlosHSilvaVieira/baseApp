@@ -52,10 +52,7 @@ export default class RemediosView extends Component {
                             >
                             <Text>Voltar</Text>
                         </Button>
-                    </Left>
-                    <Body>
-                        <Title>Remedios</Title>
-                    </Body>    
+                    </Left> 
                     <Right>
                         <Button
                             transparent
@@ -69,50 +66,24 @@ export default class RemediosView extends Component {
                     <Form style={styles.form}>
                         <Item inlineLabel style={styles.item}>
                             <Label>Nome</Label>
-                            <Input disabled><Text>{this.state.remedio.name}</Text></Input>   
+                            <Input disabled><Text>{this.state.remedio.nome}</Text></Input>   
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data de inicio da medicação</Label>
-                            <DatePicker
-                                style={styles.datePicker}
-                                date={this.state.remedio.dateStart}
-                                mode='date'
-                                disabled = {true}
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                format = "DD-MM-YYYY"
-                            />
-                        </Item>  
+                            <Input disabled><Text>{this.state.remedio.dateStart.toLocaleDateString()}</Text></Input>   
+                        </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Data de fim da medicação</Label>
-                            <DatePicker
-                                style={styles.datePicker}
-                                date={this.state.remedio.dateEnd}
-                                mode='date'
-                                disabled = {true}
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                format = "DD-MM-YYYY"
-                            />
-                        </Item>  
-
+                            <Input disabled><Text>{this.state.remedio.dateEnd.toLocaleDateString()}</Text></Input>   
+                        </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Horário da medicação</Label>
-                            <DatePicker
-                                style={styles.datePicker}
-                                date={this.state.remedio.hour}
-                                mode='time'
-                                disabled = {true}
-                                showIcon = {false}
-                                is24Hour = {true}
-                                androidMode = "spinner"
-                            />
+                            <Input disabled><Text>{this.state.remedio.hora}</Text></Input>   
                         </Item>
-
                         <List>
                             <ListItem>
                                 <Label>Dias da medicação</Label>
-                                <Input disabled><Text>{this.state.remedio.days}</Text></Input>   
+                                <Input disabled><Text>{this.state.remedio.dias}</Text></Input>   
                             </ListItem>    
                             <Item />
                         </List>
