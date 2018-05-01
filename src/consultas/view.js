@@ -82,26 +82,13 @@ export default class ConsultasView extends Component {
                             <Label>Especialidade</Label>
                             <Input disabled><Text>{this.state.consulta.medico.especialidade}</Text></Input> 
                         </Item> 
-                        <Item inlineLabel style={styles.item}>
+                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewDoencasConsulta", {doencas: this.state.consulta.doencas})} >
                             <Label>Doença</Label>
-                            <List dataArray={this.state.consulta.doencas}
-                                renderRow = {(doenca) => 
-                                    <ListItem transparent button onPress={() => this.props.navigation.navigate("DoencaView", {doenca: doenca})}>
-                                        <Text>{doenca.nome}</Text>
-                                    </ListItem> 
-                                }>
-                            </List>     
+                            <Input disabled  value={this.state.consulta.doencas.length + " doenças"} />   
                         </Item>
-                        <Item inlineLabel style={styles.item}>
+                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewRemediosConsulta", {remedios: this.state.consulta.receita.remedios})}>
                             <Label>Remedios</Label>
-                            <List dataArray = {this.state.consulta.receita.remedios}
-                                renderRow = {(remedio) => 
-                                    <ListItem button
-                                        onPress = {() => this.props.navigation.navigate("RemediosView", {remedio: remedio})}>
-                                        <Text>{remedio.nome}</Text>
-                                    </ListItem>
-                                }>
-                            </List>   
+                            <Input disabled  value={this.state.consulta.receita.remedios.length + " remedios"} />    
                         </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Receita</Label>

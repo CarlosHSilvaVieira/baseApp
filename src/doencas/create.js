@@ -24,10 +24,13 @@ import {
     Label,
     Input,
     H1,
-    Item
+    Item,
+    Textarea
   } from "native-base";
 
 import styles from './styles';
+
+import axios from 'axios';
 
 import DatePicker from 'react-native-datepicker';
 
@@ -36,14 +39,43 @@ export default class DoencaCreate extends Component {
     constructor(props)
     {
         super(props);
-
-        this.state = { selecionado: 'init'};
+        this.state = { nome: '', sintomas: "",  dataInicio: '', dataFim: ''};
     }
 
     onValueChange(valor)
     {
         this.setState({selecionado: valor});
     }
+
+    sendRequest()
+    {
+        if(global.paciente._id != null)
+        {
+            let uri = "http://192.168.0.10:3000/doencas/";
+            let doenca_objeto = {nome: this.state.nome, sintomas: this.state.sintomas, dataInicio: this.state.dataInicio, paciente: global.paciente._id};
+            
+            axios.post(uri,  doenca_objeto)
+            .then((response) => this.onSave(response.data))
+            .catch((error) => console.log(error))
+        }
+        else
+        {
+            alert("não é possivel salvar os dados");
+        }
+        
+    }
+
+    onSave(objeto)
+    {
+        console.log(objeto);
+        this.props.navigation.goBack();
+
+        if(this.props.navigation.state.params.addDoenca)
+        {
+            this.props.navigation.state.params.addDoenca(objeto);
+        }
+    }
+
 
     render()
     {
@@ -64,7 +96,7 @@ export default class DoencaCreate extends Component {
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.goBack()}
+                            onPress={() => this.sendRequest()}
                             >
                             <Text>Salvar</Text>
                         </Button>
@@ -72,39 +104,52 @@ export default class DoencaCreate extends Component {
                 </Header>
                 <Content>
                     <Form>
-                        
-                        <Picker
-                            placeholder="Selecione uma doença"
-                            iosHeader="Selecione uma doença"
-                            mode="dropdown"
-                            selectedValue={this.state.selecionado}
-                            onValueChange={this.onValueChange.bind(this)}
-                            >
-                                <Picker.Item label="Selecione uma doença" value="init" />
-                                <Picker.Item label="doença 01" value="key0" />
-                                <Picker.Item label="doença 02" value="key1" />
-                                <Picker.Item label="doença 03" value="key2" />
-                                <Picker.Item label="doença 04" value="key3" />
-                                <Picker.Item label="doença 05" value="key4" />
-                            </Picker>
-
                         <Item style={styles.item}>
-                            <Text>Inicio dos sintomas</Text>
+                            <Label>Nome da doença</Label>
+                            <Input onChangeText={(texto) => this.setState({nome: texto})} />
+                        </Item>    
+                        <Item style={styles.item}>
+                            <Label>Descrição</Label>
+                            <Input onChangeText={(texto) => this.setState({descricao: texto})} />
+                        </Item>   
+                        <Item style={styles.item}>
+                            <Label>Sintomas</Label>
+                            <Input onChangeText={(texto) => this.setState({sintomas: texto})} />
+                        </Item>    
+                        <Item style={styles.item}>
+                            <Label>Inicio dos sintomas</Label>
                                 <DatePicker
                                     style={styles.datePicker}
-                                    date={this.state.data}
+                                    date={this.state.dataInicio}
                                     mode='date'
                                     showIcon = {false}
                                     androidMode = "calendar"
                                     format = "DD-MM-YYYY"
                                     placeholder='select date'
-                                    minDate={new Date('2016-05-01')}
+                                    minDate={new Date('1999-01-01')}
                                     maxDate={new Date()}
                                     confirmBtnText='Confirm'
                                     cancelBtnText='Cancel'
-                                    onDateChange={(date) => {this.setState({data: date})}}
+                                    onDateChange={(date) => {this.setState({dataInicio: date})}}
                                 /> 
-                            </Item>       
+                        </Item>  
+                        <Item style={styles.item}>
+                            <Label>Fim dos sintomas</Label>
+                                <DatePicker
+                                    style={styles.datePicker}
+                                    date={this.state.dataFim}
+                                    mode='date'
+                                    showIcon = {false}
+                                    androidMode = "calendar"
+                                    format = "DD-MM-YYYY"
+                                    placeholder='select date'
+                                    minDate={new Date('1999-01-01')}
+                                    maxDate={new Date()}
+                                    confirmBtnText='Confirm'
+                                    cancelBtnText='Cancel'
+                                    onDateChange={(date) => {this.setState({dataFim: date})}}
+                                /> 
+                        </Item>       
                     </Form>
                 </Content>     
             </Container>

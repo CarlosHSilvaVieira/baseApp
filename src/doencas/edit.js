@@ -23,50 +23,66 @@ import {
     Picker,
     Label,
     Input,
+    H1,
     Item,
-    Fab
+    Textarea
   } from "native-base";
+
+import styles from './styles';
 
 import axios from 'axios';
 
 import DatePicker from 'react-native-datepicker';
 
-import styles from './styles';
-
-export default class DoencaView extends Component {
-
+export default class DoencaEdit extends Component {
+    
     constructor(props)
     {
         super(props);
-        const {state} = this.props.navigation;
-        let aux = state.params ? state.params.doenca : "<undefined>";
-        this.state = {doenca: aux};
+        let aux_doenca = this.props.navigation.state.params ? this.props.navigation.state.params.doenca : null;
+        this.state = {nome: aux_doenca.nome, sintomas: aux_doenca.sintomas, dataInicio: new Date(aux_doenca.dataInicio), dataFim: new Date(aux_doenca.dataFim), deonca: aux_doenca};
     }
 
-    deleteDoenca()
+    onValueChange(valor)
     {
-        let uri = "http://192.168.0.10:3000/doenca/" + this.state.doenca._id;
-        
-        axios.delete(uri)
-        .then((response) => this.goBack())
-        .catch((error) => alert(error))
+        this.setState({selecionado: valor});
     }
 
-    goBack()
+    sendRequest()
+    {
+        if(this.state.id_paciente != null)
+        {
+            let uri = "http://192.168.0.10:3000/doencas/" + this.state.doenca._id;
+            let doenca_objeto = {nome: this.state.nome, sintomas: this.state.sintomas, dataInicio: this.state.dataInicio, dataFim: this.state.dataFim, paciente: global.paciente._id};
+            
+            axios.put(uri,  doenca_objeto)
+            .then((response) => this.onSave(response.data))
+            .catch((error) => console.log(error))
+        }
+        else
+        {
+            alert("não é possivel salvar os dados");
+        }
+        
+    }
+
+    
+
+    onSave(objeto)
     {
         this.props.navigation.goBack();
-        this.props.navigation.state.params.deleteDoenca(this.state.doenca);
+
+        if(this.props.navigation.state.params.addDoenca)
+        {
+            this.props.navigation.state.params.updateDoenca(objeto);
+        }
     }
 
-    updateDoenca = (data) =>
-    {
-        this.setState({doenca: data});
-    }
 
     render()
     {
         return(
-            <Container>
+            <Container style={styles.conteiner}>
                 <Header>
                     <Left>
                         <Button
@@ -76,69 +92,63 @@ export default class DoencaView extends Component {
                         <Icon name='arrow-back' />
                         </Button>
                     </Left>
+                    <Body>
+                        <Title>Doenças</Title>
+                    </Body>
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("DoencaEdit", {updateDoenca: this.updateDoenca, doenca: this.state.doenca})}>
-                            <Text>Editar</Text>
+                            onPress={() => this.sendRequest()}
+                            >
+                            <Text>Salvar</Text>
                         </Button>
-                    </Right>    
+                    </Right>
                 </Header>
                 <Content>
                     <Form>
                         <Item style={styles.item}>
                             <Label>Nome da doença</Label>
-                            <Input disabled value={this.state.doenca.nome}/>
+                            <Input value={this.state.nome} onChangeText={(texto) => this.setState({nome: texto})} />
                         </Item>    
                         <Item style={styles.item}>
                             <Label>Sintomas</Label>
-                            <Input disabled value={this.state.doenca.sintomas}/>
+                            <Input value={this.state.sintomas} onChangeText={(texto) => this.setState({sintomas: texto})} />
                         </Item>    
                         <Item style={styles.item}>
                             <Label>Inicio dos sintomas</Label>
                                 <DatePicker
                                     style={styles.datePicker}
-                                    date={this.state.doenca.dataInicio}
+                                    date={this.state.dataInicio}
                                     mode='date'
-                                    disabled = {true}
                                     showIcon = {false}
                                     androidMode = "calendar"
                                     placeholder='select date'
-                                    minDate={new Date('1990-01-01')}
+                                    minDate={new Date('1999-01-01')}
+                                    maxDate={new Date()}
                                     confirmBtnText='Confirm'
                                     cancelBtnText='Cancel'
+                                    onDateChange={(date) => {this.setState({dataInicio: date})}}
                                 /> 
-                        </Item>       
+                        </Item>    
                         <Item style={styles.item}>
                             <Label>Fim dos sintomas</Label>
                                 <DatePicker
                                     style={styles.datePicker}
-                                    date={this.state.doenca.dataFim}
+                                    date={this.state.dataFim}
                                     mode='date'
-                                    disabled = {true}
                                     showIcon = {false}
                                     androidMode = "calendar"
                                     placeholder='select date'
-                                    minDate={new Date('1990-01-01')}
+                                    minDate={new Date('1999-01-01')}
+                                    maxDate={new Date()}
                                     confirmBtnText='Confirm'
                                     cancelBtnText='Cancel'
+                                    onDateChange={(date) => {this.setState({dataFim: date})}}
                                 /> 
-                        </Item>  
+                        </Item>   
                     </Form>
-                </Content>    
-                <Fab
-                    style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomRight"
-                    onPress = {() => this.deleteDoenca()}>
-                    <Icon name="ios-trash" />
-                </Fab>
-                <Fab
-                    style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomLeft"
-                    onPress = {() => this.deleteDoenca()}>
-                    <Icon name="ios-map" />
-                </Fab>
-            </Container>    
+                </Content>     
+            </Container>
         );
     }
 }

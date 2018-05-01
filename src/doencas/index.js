@@ -24,32 +24,47 @@ import {
 
 import styles from './styles';
 
-const datas = [
-    {
-        route: "DoencaView",
-        text: "Doença 01"
-      },
-      {
-        route: "DoencaView",
-        text: "Doença 02"
-      },
-      {
-        route: "DoencaView",
-        text: "Doença 03"
-      },
-      {
-        route: "DoencaView",
-        text: "Doença 04"
-      }
-];
+import axios from 'axios';
+
+const pacienteId = "5ae1e6c71162282378693abc";
 
 export default class DoencasIndex extends Component {
-    
+
     constructor(props)
     {
         super(props);
+        this.state = {doencas: []};
     }
     
+    getDoencasAsyn()
+    {
+        let uri = "http://192.168.0.10:3000/doencas/paciente/" + pacienteId;
+
+        axios.get(uri)
+        .then((response) => this.setState({doencas: response.data}))
+        .catch((error) => alert(error));
+    }
+
+    addDoenca = (doenca) =>
+    {
+        let vetor = this.state.doencas;
+        vetor.push(doenca);
+        this.setState({doencas: vetor});
+    }
+
+    deleteDoenca = (doenca) =>
+    {
+        let vetor = this.state.doencas;
+        let index = vetor.indexOf(doenca);
+        vetor.splice(index, 1);
+        this.setState({doencas: vetor});
+    }
+
+    componentDidMount()
+    {
+        this.getDoencasAsyn();
+    }
+
     render()
     {
         return(
@@ -71,15 +86,15 @@ export default class DoencasIndex extends Component {
 
                 <Content>
                     <List
-                        dataArray={datas}
+                        dataArray={this.state.doencas}
                         renderRow={data => 
                             <ListItem
                                 button
-                                onPress={() => this.props.navigation.navigate(data.route, {doenca: data})}
+                                onPress={() => this.props.navigation.navigate("DoencaView", {deleteDoenca: this.deleteDoenca, doenca: data})}
                             >
                                 <Left>
                                     <Text>
-                                        {data.text}
+                                        {data.nome}
                                     </Text>
                                 </Left>
                                 <Right>
@@ -94,7 +109,7 @@ export default class DoencasIndex extends Component {
                 containerStyle={{ }}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={() => this.props.navigation.navigate("DoencasCreate")}>
+                onPress={() => this.props.navigation.navigate("DoencasCreate", {addDoenca: this.addDoenca, pacienteId: pacienteId})}>
                     <Icon name="ios-add"/>
                 </Fab>   
             </Container>

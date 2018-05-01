@@ -23,43 +23,55 @@ export default class Week extends Component {
     constructor(props)
     {
         super(props);
-        this.state = {todos_dias: false, segunda: false, terca: false, quarta: false, quinta: false, sexta: false, sabado: false, domingo: false, days: []};
+        this.state = {todos_dias: false, segunda: false, terca: false, quarta: false, quinta: false, sexta: false, sabado: false, domingo: false, dias: []};
     }
+
+    componentDidMount() 
+    {
+        let vetor = this.props.navigation.state.params ? this.props.navigation.state.params.dias : []; 
+
+        if(vetor.length > 0)
+        {
+            this.setState({dias: vetor});
+            for(let i = 0; i < vetor.length; i++)
+            {
+                this.alteraCheckBox(false, true, vetor[i]);
+            }
+        }
+    }
+
 
     goBack(props)
     {
         const { navigation } = props;
         navigation.goBack();
-        
-        let vetor = this.state.days;
-        vetor.sort();
 
-        navigation.state.params.onDaysChange({days: vetor});
+        navigation.state.params.onDaysChange(this.state.dias);
     }
     
     alteraVetorDias(valor, dia, todos)
     {
         if(!todos)
         {
-            let vetor = this.state.days;
+            let vetor = this.state.dias;
 
             if(valor == true) 
             {
                 vetor.push(dia);
-                this.setState({days: vetor});
+                this.setState({dias: vetor});
             } else { 
                 let index = vetor.indexOf(dia); 
                 vetor.splice(index, 1);
-                this.setState({days: vetor});
+                this.setState({dias: vetor});
             }
         }
         else
         {
             if(valor == true) {
 
-                this.setState({days: ["seg ", "ter ", "qua ", "qui ", "sex ", "sab ", "dom "]});
+                this.setState({dias: ["seg ", "ter ", "qua ", "qui ", "sex ", "sab ", "dom "]});
             } else {  
-                this.setState({days: []});
+                this.setState({dias: []});
             }
         }
     }
@@ -71,40 +83,40 @@ export default class Week extends Component {
             this.setState({todos_dias: valor, segunda: valor, terca: valor, quarta: valor, quinta: valor, sexta: valor, sabado: valor, domingo: valor})
             this.alteraVetorDias(valor, "", true)
         }
-        else if(dia == "segunda")
+        else if(dia == "seg")
         {
             this.setState({segunda: valor});
-            this.alteraVetorDias(valor, "seg ", false);
+            this.alteraVetorDias(valor, "seg", false);
         }
-        else if(dia == "terça")
+        else if(dia == "ter")
         {
             this.setState({terca: valor});
-            this.alteraVetorDias(valor, "ter ", false);
+            this.alteraVetorDias(valor, "ter", false);
         }
-        else if(dia == "quarta")
+        else if(dia == "qua")
         {
             this.setState({quarta: valor});
-            this.alteraVetorDias(valor, "qua ", false);
+            this.alteraVetorDias(valor, "qua", false);
         }
-        else if(dia == "quinta")
+        else if(dia == "qui")
         {
             this.setState({quinta: valor});
-            this.alteraVetorDias(valor, "qui ", false);
+            this.alteraVetorDias(valor, "qui", false);
         }
-        else if(dia == "sexta")
+        else if(dia == "sex")
         {
             this.setState({sexta: valor});
-            this.alteraVetorDias(valor, "sex ", false);
+            this.alteraVetorDias(valor, "sex", false);
         }
-        else if(dia == "sabado")
+        else if(dia == "sab")
         {
             this.setState({sabado: valor});
-            this.alteraVetorDias(valor, "sab ", false);
+            this.alteraVetorDias(valor, "sab", false);
         }
-        else if(dia == "domingo")
+        else if(dia == "dom")
         {
             this.setState({domingo: valor});
-            this.alteraVetorDias(valor, "dom ", false);
+            this.alteraVetorDias(valor, "dom", false);
         }
     }
 
@@ -135,43 +147,43 @@ export default class Week extends Component {
                                 </Body>     
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.segunda} onPress = {() => this.alteraCheckBox(false, !this.state.todos_dias, "segunda")}/>
+                            <CheckBox checked={this.state.segunda} onPress = {() => this.alteraCheckBox(false, !this.state.todos_dias, "seg")}/>
                                 <Body>
                                     <Text>Segunda</Text>
                                 </Body> 
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.terca} onPress = {() => this.alteraCheckBox(false, !this.state.terca, "terça")}/>
+                            <CheckBox checked={this.state.terca} onPress = {() => this.alteraCheckBox(false, !this.state.terca, "ter")}/>
                                 <Body>
                                     <Text>Terça</Text>
                                 </Body>  
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.quarta} onPress = {() => this.alteraCheckBox(false, !this.state.quarta, "quarta")}/>
+                            <CheckBox checked={this.state.quarta} onPress = {() => this.alteraCheckBox(false, !this.state.quarta, "qua")}/>
                                 <Body>
                                     <Text>Quarta</Text>
                                 </Body>  
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.quinta} onPress = {() => this.alteraCheckBox(false, !this.state.quinta, "quinta")}/>
+                            <CheckBox checked={this.state.quinta} onPress = {() => this.alteraCheckBox(false, !this.state.quinta, "qui")}/>
                                 <Body>
                                     <Text>Quinta</Text>
                                 </Body>  
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.sexta} onPress = {() => this.alteraCheckBox(false, !this.state.sexta, "sexta")}/>
+                            <CheckBox checked={this.state.sexta} onPress = {() => this.alteraCheckBox(false, !this.state.sexta, "sex")}/>
                                 <Body>
                                     <Text>Sexta</Text>
                                 </Body>  
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.sabado} onPress = {() => this.alteraCheckBox(false, !this.state.sabado, "sabado")}/>
+                            <CheckBox checked={this.state.sabado} onPress = {() => this.alteraCheckBox(false, !this.state.sabado, "sab")}/>
                                 <Body>
                                     <Text>Sabado</Text>
                                 </Body> 
                         </ListItem> 
                         <ListItem>
-                            <CheckBox checked={this.state.domingo} onPress = {() => this.alteraCheckBox(false, !this.state.domingo, "domingo")}/>
+                            <CheckBox checked={this.state.domingo} onPress = {() => this.alteraCheckBox(false, !this.state.domingo, "dom")}/>
                                 <Body>
                                     <Text>Domingo</Text>
                                 </Body>

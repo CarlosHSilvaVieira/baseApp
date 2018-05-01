@@ -25,27 +25,15 @@ import {
 
 import styles from './styles';
 
-
-const data = [
-    'Simon Mignolet',
-    'Nathaniel Clyne',
-    'Dejan Lovren',
-    'Mama Sakho',
-    'Alberto Moreno',
-    'Emre Can',
-    'Joe Allen',
-    'Phil Coutinho',
-  ];
-
 export default class AddRemediosConsulta extends Component {
 
     constructor(props)
     {
         super(props);
-        //const { state } = this.props.navigation;
-        //let aux = state.params ? state.params.data : null;
+        let aux = this.props.navigation.state.params.remedios ? this.props.navigation.state.params.remedios : [];
+        this.state = {remedios : aux};
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-        this.state = {remedios : data};
+        
     }
 
     deleteRow(secId, rowId, rowMap) 
@@ -83,7 +71,7 @@ export default class AddRemediosConsulta extends Component {
                         dataSource = {this.ds.cloneWithRows(this.state.remedios)}
                         renderRow = {(data) =>
                             <ListItem>
-                                <Text> {data} </Text>
+                                <Text> {data.nome} </Text>
                             </ListItem>
                         }
                         renderLeftHiddenRow = {(data) =>

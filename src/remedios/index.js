@@ -23,17 +23,58 @@ import {
     Title
   } from "native-base";
 
-const data =  [{id: 1, nome: "remedio 01", bula: "", dateStart: new Date('2018-01-03'), dateEnd: new Date('2018-01-15'), hora: "15:00", dias:["seg ", "ter "]}];
+import axios from 'axios';  
+
+const pacienteId = "5ae1e6c71162282378693abc";
 
 export default class RemediosIndex extends Component {
     
-    constructor(props) {
+    constructor(props) 
+    {
         super(props);
-        this.state = {remedios: data};
+        let id_paciente = this.props.navigation.state.params ? this.props.navigation.state.params.id_paciente : null;
+        this.state = {remedios: [], id_paciente: id_paciente};
+    }
+
+    getRemedios()
+    {
+        if(pacienteId != null)
+        {
+            let uri = "http://192.168.0.10:3000/remedios/" + global.paciente._id;
+
+            axios.get(uri)
+            .then((response) => this.setState({remedios: response.data}))
+            .catch((erro) => alert(erro));
+        }
+        else
+        {
+            alert("erro ao buscar os remédios do usuário");
+        }
+    }
+
+    componentWillMount()
+    {
+        this.getRemedios();
+    }
+
+    addRemedio = (data) =>
+    {
+        let vetor = this.state.remedios;
+        vetor.push(data);
+        this.setState({remedios: vetor});
+    }
+
+    deleteRemedio = (data) =>
+    {
+        let vetor = this.state.remedios;
+        let index = vetor.indexOf(data);
+        vetor.splice(index, 1);
+        this.setState({remedios: vetor});
     }
 
     render() 
     {
+        this.getRemedios();
         return(
             <Container>
                 <Header>
@@ -55,7 +96,7 @@ export default class RemediosIndex extends Component {
                         dataArray={this.state.remedios}
                         renderRow = {(remedio) => 
                             <ListItem button
-                                onPress = {() => this.props.navigation.navigate("RemediosView", {remedio: remedio})}>
+                                onPress = {() => this.props.navigation.navigate("RemediosView", {remedio: remedio, deleteRemedio: this.deleteRemedio})}>
                                 <Text>{remedio.nome}</Text>
                             </ListItem>    
                         }>
@@ -64,7 +105,7 @@ export default class RemediosIndex extends Component {
                 <Fab
                     style={{ backgroundColor: '#5067FF' }}
                     position = "bottomRight"
-                    onPress = {() => this.props.navigation.navigate("RemediosCreate")}>
+                    onPress = {() => this.props.navigation.navigate("RemediosCreate", {addRemedio: this.addRemedio})}>
                     <Icon name="ios-add" />
                 </Fab>      
             </Container>    

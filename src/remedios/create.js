@@ -22,7 +22,8 @@ import {
   } from "native-base";
 
 import DatePicker from 'react-native-datepicker';
-import moment from 'moment';
+
+import axios from 'axios';
 
 import styles from './styles';
 import Week from './week';
@@ -32,12 +33,41 @@ export default class RemediosCreate extends Component
     constructor(props)
     {
         super(props);
-        this.state = {dateStart: new Date(), dateEnd: new Date(), hour: null};
+        this.state = {nome: "", bula: "", dataInicio: new Date(), dataFim: new Date(), horarios: [], dias: []};
     }
 
     onDaysChange = (data) =>
     {
-        this.setState(data);
+        this.setState({dias: data});
+    }
+
+    onAddHoras = (horas) =>
+    {
+        this.setState({horarios: horas});
+    }
+
+    save()
+    {
+        let uri = "http://192.168.0.10:3000/remedios/";
+
+        let remedio = {
+            nome: this.state.nome, 
+            bula: this.state.bula, 
+            dataInicio: new Date(this.state.dataInicio),
+            dataFim: new Date(this.state.dataFim),
+            horarios: this.state.horarios,
+            dias: this.state.dias,
+            paciente: global.paciente._id};  
+
+        axios.post(uri, remedio)
+        .then((response) => this.goBack(response.data))
+        .catch((error) => alert(error));
+    }
+
+    goBack(data)
+    {
+        this.props.navigation.goBack();
+        this.props.navigation.state.params.addRemedio(data);
     }
 
     render()
@@ -59,7 +89,7 @@ export default class RemediosCreate extends Component
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.goBack()}
+                            onPress={() => this.save()}
                             >
                             <Text>Salvar</Text>
                             </Button>
@@ -69,66 +99,56 @@ export default class RemediosCreate extends Component
                     <Form style={styles.form}>
                         <Item inlineLabel style={styles.item}>
                             <Label>Nome</Label>
-                            <Input />   
+                            <Input onChangeText = {(texto) => {this.setState({nome: texto})}} />   
+                        </Item> 
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Bula</Label>
+                            <Input onChangeText = {(texto) => {this.setState({bula: texto})}} />   
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data de inicio da medicação</Label>
                             <DatePicker
                                 style={styles.datePicker}
-                                date={this.state.dateStart}
+                                date={this.state.dataInicio}
                                 mode='date'
                                 showIcon = {false}
                                 androidMode = "calendar"
-                                format = "DD-MM-YYYY"
                                 placeholder='select date'
                                 minDate={new Date('2016-05-01')}
                                 maxDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({dateStart: date})}}
+                                is24Hour = {true}
+                                onDateChange={(date) => {this.setState({dataInicio: date})}}
                             />
                         </Item>  
                         <Item inlineLabel style={styles.item}>
                             <Label>Data de fim da medicação</Label>
                             <DatePicker
                                 style={styles.datePicker}
-                                date={this.state.dateEnd}
+                                date={this.state.dataFim}
                                 mode='date'
                                 showIcon = {false}
                                 androidMode = "calendar"
-                                format = "DD-MM-YYYY"
                                 placeholder='select date'
                                 minDate={new Date('2016-05-01')}
                                 maxDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({dateEnd: date})}}
+                                is24Hour = {true}
+                                onDateChange={(date) => {this.setState({dataFim: date})}}
                             />
                         </Item>  
 
                         <Item inlineLabel style={styles.item}>
                             <Label>Horário da medicação</Label>
-                            <DatePicker
-                                style={styles.datePicker}
-                                date={this.state.hour}
-                                mode='time'
-                                showIcon = {false}
-                                is24Hour = {true}
-                                androidMode = "spinner"
-                                confirmBtnText='Confirm'
-                                cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({hour: date})}}
-                            />
+                            <Button transparent onPress = {() => this.props.navigation.navigate("Hours", {onAddHoras: this.onAddHoras, horarios: this.state.horarios})}><Text>{this.state.horarios.length + " horários"}</Text></Button>
                         </Item>
 
-                        <List>
-                            <ListItem button
-                                onPress = {() => this.props.navigation.navigate("Week", {onDaysChange: this.onDaysChange, navigation: this.props})}>
-                                <Label>Dias</Label>
-                                <Input disabled><Text>{this.state.days}</Text></Input> 
-                            </ListItem>    
-                            <Item />
-                        </List>
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Dias da medicação</Label>
+                            <Button transparent onPress = {() => this.props.navigation.navigate("Week", {onDaysChange: this.onDaysChange, dias: this.state.dias})}><Text>{this.state.dias.length + " dias"}</Text></Button>
+                        </Item>
                     </Form>
                 </Content>    
             </Container>    

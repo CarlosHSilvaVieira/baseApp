@@ -23,16 +23,18 @@ import {
     Textarea
   } from "native-base";
 
+import DatePicker from 'react-native-datepicker';
+
 import styles from './styles';
 
-export default class AddDoencasConsulta extends Component {
-
+export default class Hours extends Component
+{
     constructor(props)
     {
         super(props);
-        const { state } = this.props.navigation;
-        let aux = state.params.doencas ? state.params.doencas : [];
-        this.state = {doencas: aux}
+        const {state} = this.props.navigation;
+        let aux_horarios = state.params ? state.params.horarios : null;
+        this.state = { horarios: aux_horarios };
 
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     }
@@ -47,17 +49,17 @@ export default class AddDoencasConsulta extends Component {
 
     onBack()
     {
-        this.props.navigation.navigate.goBack();
-        this.props.navigation.state.params.onAddDoencas(this.state.doencas)
+        this.props.navigation.goBack();
+        this.props.navigation.state.params.onAddHoras(this.state.horarios)
     }
 
-    addDoenca = (doenca) =>
+    addHora = (hora) =>
     {
-        let vetor = this.state.doencas;
-        vetor.push(doenca);
-        this.setState({doencas: vetor});
+        let vetor = this.state.horarios;
+        vetor.push(hora);
+        this.setState({horarios: vetor});
     }
-
+    
     render()
     {
         return(
@@ -66,7 +68,7 @@ export default class AddDoencasConsulta extends Component {
                     <Left>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.goBack()}
+                            onPress={() => this.onBack()}
                             >
                             <Text>Voltar</Text>
                         </Button>
@@ -74,7 +76,7 @@ export default class AddDoencasConsulta extends Component {
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("DoencasCreate", {addDoenca: this.addDoenca})}
+                            onPress={() => this.props.navigation.navigate("addHour", {addHora: this.addHora})}
                             >
                             <Text>Adicionar</Text>
                         </Button>
@@ -82,10 +84,10 @@ export default class AddDoencasConsulta extends Component {
                 </Header>
                 <Content>
                     <List
-                        dataSource = {this.ds.cloneWithRows(this.state.doencas)}
+                        dataSource = {this.ds.cloneWithRows(this.state.horarios)}
                         renderRow = {(data) =>
                             <ListItem>
-                                <Text> {data.nome} </Text>
+                                <Text> {data} </Text>
                             </ListItem>
                         }
                         renderLeftHiddenRow = {(data) =>
