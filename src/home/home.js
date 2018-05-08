@@ -18,17 +18,21 @@ import {
     Grid,
     Col,
     Row,
+    Thumbnail,
+    H3
   } from "native-base";
 
 import DoencasIndex from '../doencas';
 import VacinasIndex from '../vacinas';
+
+const foto_usuario = require('../../assets/user.jpg');
 
 export default class Home extends Component {
 
     render()
     {
         return(
-            <Container style={styles.container}>
+            <Container>
                 <Header>
                     <Left>
                         <Button
@@ -44,17 +48,16 @@ export default class Home extends Component {
                     <Right />
                 </Header>   
                 <Grid>
-                    <Col style={{backgroundColor: 'red'}}>
+                    <Col style={styles.container}>
+                        <Thumbnail large style={styles.thumbnail} circular={true} source={foto_usuario}/>
+                        <Text>
+                            <H3>Bem vindo!!!</H3>
+                        </Text>    
+                        <Text style={styles.text}>
+                            Mentenha atualizado seu histórico médico
+                        </Text>    
                     </Col>
-
-                    <Col>
-                        <Row style={{backgroundColor: 'blue'}}>
-                        </Row>
-
-                        <Row style={{backgroundColor: 'green'}}>
-                        </Row>       
-                    </Col>
-                </Grid>     
+                </Grid>         
             </Container> 
         );
     }
