@@ -45,6 +45,12 @@ export default class DoencasIndex extends Component {
         .catch((error) => alert(error));
     }
 
+    /*shouldComponentUpdate()
+    {
+        this.getDoencasAsyn();
+        return true;
+    }*/
+
     addDoenca = (doenca) =>
     {
         let vetor = this.state.doencas;

@@ -18,13 +18,16 @@ import {
     Form,
     Label,
     Input,
-    Item
+    Item,
+    Switch
   } from "native-base";
 
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 
 import styles from './styles';
+
+import axios from 'axios';
 
 export default class VacinaEdit extends Component
 {
@@ -34,13 +37,33 @@ export default class VacinaEdit extends Component
         
         const {state} = this.props.navigation;
         let aux = state.params ? state.params.vacina : null;
+        this.state = {
+            _id: aux._id,
+            nome: aux.nome,
+            data: aux.data,
+            dataReforco: aux.dataReforco,
+            reforco: aux.reforco,
+        };
+    }
 
-        if(aux !== null)
+    onUpdate()
+    {
+        let uri =  global.uri + "/vacina/" + this.state._id;
+        let dados = {data: this.state.data, nome: this.state.nome, reforco: this.state.reforco, dataReforco: this.state.dataReforco, paciente: global.paciente._id};
+        
+        axios.put(uri, dados)
+        .then((response) => this.goBack(response.data))
+        .catch((error) => alert(error))
+    }
+
+    goBack(dados)
+    {
+        this.props.navigation.goBack();
+
+        if(this.props.navigation.state.params.updateVacina)
         {
-            this.state = {vacina: aux, dateVaccination: aux.dateVaccination, dateReinforce: new Date()};
+            this.props.navigation.state.params.updateVacina(dados);
         }
-
-        this.state = {vacina: aux, dateVaccination: aux.dateVaccination, dateReinforce: new Date()};
     }
 
     render()
@@ -59,55 +82,72 @@ export default class VacinaEdit extends Component
                     <Body>
                         <Title>Vacinas</Title>
                     </Body>
-                    <Right />
+                    <Right>
+                        <Button
+                            transparent
+                            onPress={() => this.onUpdate()}
+                            >
+                                <Text>Salvar</Text>
+                        </Button>
+                    </Right>
                 </Header>
 
-                <Container>
-                    <Form style={styles.form}>
+                <Content>
+                <Form style={styles.form}>
                         <Item inlineLabel style={styles.item}>
                             <Label>Nome</Label>
-                            <Input>{this.state.vacina.text}</Input>
+                            <Input value={this.state.nome} onChangeText={(texto) => this.setState({nome: texto})} />
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data da vacinação</Label>
-                            <DatePicker
+                            <Left />
+                            <Body />
+                            <Right><DatePicker
+                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
                                 style={styles.datePicker}
-                                date={this.state.dateVaccination}
+                                date={this.state.data}
                                 mode='date'
                                 showIcon = {false}
                                 androidMode = "calendar"
-                                format = "DD-MM-YYYY"
-                                placeholder='select date'
-                                minDate={new Date('2016-05-01')}
+                                placeholder='selecione'
+                                minDate={new Date('1999-01-01')}
                                 maxDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({dateVaccination: date})}}
+                                onDateChange={(date) => {this.setState({data: date})}}
                             />
-                        </Item>
-
+                            </Right>
+                        </Item> 
                         <Item inlineLabel style={styles.item}>
-                            <Label>Data do reforço da vacinação</Label>
-                            <DatePicker
+                            <Label>Necessita de refoço</Label>
+                            <Left />
+                            <Body>
+                                <Switch style={styles.switch} value={this.state.reforco} onValueChange={(novo) => this.setState({reforco: novo})} /> 
+                            </Body>  
+                            <Right />
+                        </Item>  
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Reforço</Label>
+                            <Left />
+                            <Body />
+                            <Right><DatePicker
+                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
                                 style={styles.datePicker}
-                                date={this.state.dateReinforce}
+                                disabled={!this.state.reforco}
+                                date={this.state.dataReforco}
                                 mode='date'
                                 showIcon = {false}
                                 androidMode = "calendar"
-                                format = "DD-MM-YYYY"
-                                placeholder='select date'
-                                minDate={new Date('2016-05-01')}
-                                maxDate={new Date()}
+                                placeholder='selecione'
+                                minDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({dateReinforce: date})}}
+                                onDateChange={(date) => {this.setState({dataReforco: date})}}
                             />
-                        </Item>  
+                            </Right>
+                        </Item> 
                     </Form>    
-                    <Button full success style={styles.button}><Text> Atualizar </Text></Button>
-
-                    <Button full warning style={styles.button}><Text> Voltar </Text></Button>
-                </Container>    
+                </Content>    
             </Container>    
            
         );

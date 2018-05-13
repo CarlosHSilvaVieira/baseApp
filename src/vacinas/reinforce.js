@@ -20,25 +20,44 @@ import {
     H3
   } from "native-base";
 
-const datas =  ['vacina 04', 'vacina 05', 'vacina 06'];
+import axios from 'axios';
 
 export default class VacinasReinforce extends Component {
 
     constructor(props)
     {
         super(props);
-        this.state = {items: datas};
+        this.state = {reforcar: []};
+    }
+
+    getVacinasReforcar()
+    {
+        let uri = global.uri + "/vacinas/reforcar/"+ global.paciente._id;
+        axios.get(uri)
+        .then((response) => {this.setState({reforcar: response.data})})
+        .catch((error) => alert(error))
+    }
+
+    componentWillMount()
+    {
+        this.getVacinasReforcar();
+    }
+
+    shouldComponentUpdate()
+    {
+        this.getVacinasReforcar();
+        return true;
     }
 
     render()
     {
         return(
             <Content>
-                <List dataArray={this.state.items}
+                <List dataArray={this.state.reforcar}
                     renderRow={(item) =>                        
                         <ListItem button
-                        onPress = {() => this.props.navigation.navigate("VacinasView", {vacina: {text: item}})}>
-                            <Text>{item}</Text>
+                        onPress = {() => this.props.navigation.navigate("VacinasEdit", {vacina: item})}>
+                            <Text>{item.nome}</Text>
                         </ListItem>    
                     }>
                 </List>

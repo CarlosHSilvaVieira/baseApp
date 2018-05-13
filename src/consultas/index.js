@@ -47,6 +47,12 @@ export default class ConsultasIndex extends Component {
         this.state = {consultas: data};
     }
 
+
+    /*shouldComponentUpdate()
+    {
+        return true;
+    }*/
+
     render()
     {
         return(

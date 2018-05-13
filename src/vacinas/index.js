@@ -24,6 +24,8 @@ import {
     Fab
   } from "native-base";
 
+import axios from 'axios';
+
 import ListVacinas from './list';  
 import VacinasReinforce from './reinforce';
 
@@ -32,7 +34,7 @@ export default class VacinasIndex extends Component {
     constructor(props)
     {
         super(props);
-        this.state = {pagina: 0}
+        this.state = {pagina: 0, vacinas: [], reforcar: []}
     }
 
     render()
@@ -54,21 +56,13 @@ export default class VacinasIndex extends Component {
                     <Right />
                 </Header>
                 <Tabs initialPage={this.state.pagina}>
-                    <Tab heading="Reforçar">
-                        <VacinasReinforce navigation={this.props.navigation} />
-                    </Tab>
-                    <Tab heading="Minha lista">
+                     <Tab heading="Minha lista">
                         <ListVacinas navigation={this.props.navigation}/>
-                        <Fab
-                        containerStyle={{ }}
-                        style={{ backgroundColor: '#5067FF' }}
-                        position="bottomRight"
-                        onPress={() => this.props.navigation.navigate("VacinasCreate")}>
-                            <Icon name="ios-add"/>
-                        </Fab> 
-                    </Tab>  
-                </Tabs>    
-                   
+                    </Tab> 
+                    <Tab heading="Reforçar">
+                        <VacinasReinforce navigation={this.props.navigation}/>
+                    </Tab>
+                </Tabs> 
             </Container>    
         );
     }

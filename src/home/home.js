@@ -55,7 +55,22 @@ export default class Home extends Component {
                         </Text>    
                         <Text style={styles.text}>
                             Mentenha atualizado seu histórico médico
-                        </Text>    
+                        </Text>
+
+                        <Row>
+                            <Col>
+                                <Text>Vacinas</Text>
+                            </Col>
+                            <Col>
+                                <Text>Vacinas</Text>
+                            </Col>
+                            <Col>
+                                <Text>Vacinas</Text>
+                            </Col>
+                            <Col>
+                                <Text>Vacinas</Text>
+                            </Col>
+                        </Row>                            
                     </Col>
                 </Grid>         
             </Container> 

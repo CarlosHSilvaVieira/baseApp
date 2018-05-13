@@ -22,11 +22,18 @@ import {
     Form,
     Picker,
     Label,
-    Input
+    Input,
+    Fab,
+    Item,
+    Switch
   } from "native-base";
 
-import styles from './styles';
-
+  import DatePicker from 'react-native-datepicker';
+  
+  import styles from './styles';
+  
+  import axios from 'axios';
+  
 
 export default class ViewVacina extends Component 
 {
@@ -34,21 +41,37 @@ export default class ViewVacina extends Component
     {
         super(props);
         const {state} = this.props.navigation;
-        let aux = state.params ? state.params.vacina : "<undefined>";
-        this.state = {vacina: aux};
+        let aux = state.params ? state.params.vacina : null;
+        this.state = {
+            vacina: aux,
+            nome: aux.nome, data: aux.data, dataReforco: aux.dataReforco, reforco: aux.reforco
+        };
     }
 
     deletarVacina ()
     {
-        let vacina = this.state.vacina;
-        console.log("deletar vacina");
+        let uri = global.uri + "/vacina/" + this.state.vacina._id;
+        axios.delete(uri)
+        .then((response) => this.goBack())
+        .catch((error) => alert(error));
+    }
+
+    goBack()
+    {
+        this.props.navigation.goBack();
+        this.props.navigation.state.params.deleteVacina(this.state.vacina);
+    }
+
+    updateVacina = (dados) =>
+    {
+        this.setState({nome: dados.nome, data: dados.data, dataReforco: dados.dataReforco, reforco: dados.reforco})
     }
 
     render()
     {
         return(
             <Container>
-                <Header>
+                 <Header>
                     <Left>
                         <Button
                         transparent
@@ -57,24 +80,87 @@ export default class ViewVacina extends Component
                         <Icon name='arrow-back' />
                         </Button>
                     </Left>
+                    <Body>
+                        <Title>Vacinas</Title>
+                    </Body>
                     <Right>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.goBack()}
-                            >
+                    <Button
+                        transparent
+                        onPress={() => this.props.navigation.navigate("VacinasEdit", { updateVacina: this.updateVacina, vacina: this.state.vacina })}
+                        >
                             <Text>Editar</Text>
                         </Button>
                     </Right>
                 </Header>
-                <Grid>
-                        <Row size={3} style={{ backgroundColor: '#635DB7', alignItems: 'center', justifyContent: 'center'}}>
-                            <Text>{this.state.vacina.text}</Text>
-                        </Row>
-                        <Row size={1} style={{ backgroundColor: '#00CE9F'}}>
-                        </Row>   
-                </Grid> 
-                <Button block danger style={styles.button} onPress={() => this.deletarVacina()}><Text>Deletar vacina</Text></Button>  
-            </Container>    
+                <Content>
+                    
+                    <Form style={styles.form}>
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Nome</Label>
+                            <Left/>
+                            <Body>
+                                <Input disabled = {true} value={this.state.nome} />
+                            </Body>
+                            <Right />
+                        </Item> 
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Data da vacinação</Label>
+                            <Left />
+                            <Body />
+                            <Right><DatePicker
+                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
+                                style={styles.datePicker}
+                                date={this.state.data}
+                                mode='date'
+                                showIcon = {false}
+                                disabled = {true}
+                                androidMode = "calendar"
+                                placeholder='selecione'
+                                minDate={new Date('1999-01-01')}
+                                maxDate={new Date()}
+                                confirmBtnText='Confirm'
+                                cancelBtnText='Cancel'
+                            />
+                            </Right>
+                        </Item> 
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Necessita de refoço</Label>
+                            <Left />
+                            <Body>
+                                <Switch disabled = {true} style={styles.switch} value={this.state.reforco} /> 
+                            </Body>  
+                            <Right />
+                        </Item>  
+                        <Item inlineLabel style={styles.item}>
+                            <Label>Reforço</Label>
+                            <Left />
+                            <Body />
+                            <Right><DatePicker
+                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
+                                style={styles.datePicker}
+                                disabled={!this.state.reforco}
+                                date={this.state.dataReforco}
+                                mode='date'
+                                showIcon = {false}
+                                disabled = {true}
+                                androidMode = "calendar"
+                                placeholder='selecione'
+                                minDate={new Date('1999-01-01')}
+                                maxDate={new Date()}
+                                confirmBtnText='Confirm'
+                                cancelBtnText='Cancel'
+                            />
+                            </Right>
+                        </Item> 
+                    </Form>    
+                </Content>   
+                <Fab
+                    style={{ backgroundColor: '#5067FF' }}
+                    position = "bottomRight"
+                    onPress = {() => this.deletarVacina()}>
+                    <Icon name="ios-trash" />
+                </Fab> 
+            </Container>      
         );
     }
 }

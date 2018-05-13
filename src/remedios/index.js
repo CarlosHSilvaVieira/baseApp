@@ -52,6 +52,12 @@ export default class RemediosIndex extends Component {
         }
     }
 
+    /*shouldComponentUpdate()
+    {
+        this.getRemedios();
+        return true;
+    }*/
+
     componentWillMount()
     {
         this.getRemedios();
