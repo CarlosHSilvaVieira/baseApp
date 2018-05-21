@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
+import styles from '../style/styles';
+
+import { ListView } from 'react-native';
 
 import {
     Container,
@@ -23,35 +25,60 @@ import {
     Title
   } from "native-base";
 
-const data = [
-    {
-        id: 1, 
-        medico: {nome: "José", crm: 156631, especialidade: "Especialidade"}, 
-        local: "Hospital 01", data: new Date(), 
-        data: new Date("2018-03-25"),
-        doencas: [{id: 1, nome: "Doenca 01", localizacao: []}], 
-        receita: 
-        {
-            texto: "Algum texto", 
-            remedios: [
-                {id: 1, nome: "remedio 01", bula: "", dateStart: new Date('2018-01-03'), dateEnd: new Date('2018-01-15'), hora: "15:00", dias:["seg ", "ter "]}
-            ]
-        } 
-    }];
+import axios from 'axios';
 
 export default class ConsultasIndex extends Component {
 
     constructor(props)
     {
         super(props);
-        this.state = {consultas: data};
+        this.state = {consultas: []};
+        this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     }
 
-
-    /*shouldComponentUpdate()
+    getAll()
     {
+        let uri = global.uri + "/consultas/" + global.paciente._id;
+
+        axios.get(uri)
+        .then((resposta) => this.setState({consultas: resposta.data}))
+        .catch((error) => alert(error));
+    }
+
+    componentWillMount()
+    {
+        this.getAll();
+    }
+
+    /*houldComponentUpdate()
+    {
+        this.getAll();
         return true;
     }*/
+
+    deletarConsulta(data)
+    {
+        let uri = global.uri + "/consulta/" + data._id;
+
+        axios.delete(uri)
+        .then((resposta) => console.log(resposta.data))
+        .catch((error) => alert(error));
+    }
+
+    deleteRow(secId, rowId, rowMap, data) 
+    {
+        rowMap[`${secId}${rowId}`].props.closeRow();
+        const newData = [...this.state.consultas];
+        newData.splice(rowId, 1);
+        this.setState({consultas: newData});
+
+        this.deletarConsulta(data);
+    }
+
+    addConsulta = (consulta) =>
+    {
+
+    }
 
     render()
     {
@@ -70,22 +97,34 @@ export default class ConsultasIndex extends Component {
                 </Header>
                 <Content>  
                     <List
-                        dataArray={this.state.consultas}
+                        dataSource = {this.ds.cloneWithRows(this.state.consultas)}
+
+                        pagingEnabled
+
+                        scrollEnabled
+
                         renderRow = {(consulta) => 
-                            <ListItem button
-                                onPress = {() => this.props.navigation.navigate("ConsultasView", {consulta: consulta})}>
-                                <Left><Text>{consulta.local}</Text></Left>
-                                <Right><Text>{consulta.data.toLocaleDateString()}</Text></Right>
+                            <ListItem >
+                                <Body><Text>{consulta.local}</Text></Body>
+                                <Right><Text>{new Date(consulta.data).toLocaleDateString()}</Text></Right>
                             </ListItem>    
-                        }>
-                    </List>   
-                </Content>   
-                <Fab
-                    style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomRight"
-                    onPress = {() => this.props.navigation.navigate("ConsultasCreate")}>
-                    <Icon name="ios-add" />
-                </Fab>           
+                        }
+
+                        renderLeftHiddenRow={(data) =>
+                            <Button full onPress={() => this.props.navigation.navigate("ConsultasView", {consulta: data})}>
+                                <Icon active name="information-circle" />
+                            </Button>
+                        }
+                        
+                        renderRightHiddenRow={(data, sectionId, rowId, rowMap) => 
+                            <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap, data)}>
+                                <Icon active name="trash" />
+                            </Button>
+                        }
+                        leftOpenValue={75}
+                        rightOpenValue={-75}
+                    />
+                </Content>           
             </Container>    
         );
     }

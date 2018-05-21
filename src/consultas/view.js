@@ -21,7 +21,8 @@ import {
     Textarea
   } from "native-base";
 
-import styles from './styles';
+import styles from '../style/styles';
+import Axios from "axios";
 
 export default class ConsultasView extends Component {
 
@@ -30,12 +31,30 @@ export default class ConsultasView extends Component {
         super(props);
         const { state } = this.props.navigation;
         let aux = state.params ? state.params.consulta : null;
-        this.state = {consulta : aux};
+        this.state = {consulta : aux, medico: {especialidades: []}};
+    }
+
+    componentWillMount()
+    {
+        this.getMedico();
     }
 
     onDaysChange = (data) =>
     {
         this.setState(data);
+    }
+
+    updateConsulta = (dados) => 
+    {
+        this.setState({consulta: dados});
+    }
+
+    getMedico()
+    {
+        let uri = global.uri + "/medico/"+ this.state.consulta.medico;
+        Axios.get(uri)
+        .then((resposta) => {this.setState({medico: resposta.data})})
+        .catch((error) => alert(error))
     }
 
     render()
@@ -54,7 +73,7 @@ export default class ConsultasView extends Component {
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("ConsultasEdit", {consulta: this.state.consulta, onDaysChange: this.onDaysChange})}
+                            onPress={() => this.props.navigation.navigate("ConsultasEdit", {consulta: this.state.consulta, updateConsulta: this.updateConsulta})}
                             >
                             <Text>Editar</Text>
                         </Button>
@@ -68,31 +87,37 @@ export default class ConsultasView extends Component {
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data</Label>
-                            <Input disabled><Text>{this.state.consulta.data.toLocaleDateString()}</Text></Input>   
+                            <Input disabled><Text>{new Date(this.state.consulta.data).toLocaleDateString()}</Text></Input>   
                         </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Medico</Label>
-                            <Input disabled><Text>{this.state.consulta.medico.nome}</Text></Input>   
+                            <Input disabled><Text>{this.state.medico.nome}</Text></Input>   
                         </Item> 
-                        <Item>
+                        <Item inlineLabel style={styles.item}>
                             <Label>CRM</Label>
-                            <Input disabled><Text>{this.state.consulta.medico.crm}</Text></Input> 
+                            <Input disabled><Text>{this.state.medico.crm}</Text></Input> 
                         </Item>   
                         <Item inlineLabel style={styles.item}>
-                            <Label>Especialidade</Label>
-                            <Input disabled><Text>{this.state.consulta.medico.especialidade}</Text></Input> 
+                            <Label>Especialidades</Label>
+                            <List 
+                            dataArray={this.state.medico.especialidades} 
+                            renderRow = {(especialidade) =>
+                                <ListItem>
+                                    <Text>{especialidade}</Text>
+                                </ListItem>    
+                            }/>
                         </Item> 
                         <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewDoencasConsulta", {doencas: this.state.consulta.doencas})} >
                             <Label>Doença</Label>
                             <Input disabled  value={this.state.consulta.doencas.length + " doenças"} />   
                         </Item>
-                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewRemediosConsulta", {remedios: this.state.consulta.receita.remedios})}>
+                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewRemediosConsulta", {remedios: this.state.consulta.remedios})}>
                             <Label>Remedios</Label>
-                            <Input disabled  value={this.state.consulta.receita.remedios.length + " remedios"} />    
+                            <Input disabled  value={this.state.consulta.remedios.length + " remedios"} />    
                         </Item>
                         <Item inlineLabel style={styles.item}>
-                            <Label>Receita</Label>
-                            <Textarea editable={false} rowSpan={5} onTouchMove={false} value={this.state.consulta.receita.texto}></Textarea>  
+                            <Label>Detalhes</Label>
+                            <Input disabled value={this.state.consulta.detalhes}></Input>  
                         </Item>
                     </Form>
                 </Content>    

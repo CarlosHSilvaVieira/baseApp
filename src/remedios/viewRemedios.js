@@ -25,6 +25,8 @@ import {
 
 import styles from './styles';
 
+import Axios from 'axios';
+
 export default class ViewRemediosConsulta extends Component {
 
     constructor(props)
@@ -32,9 +34,31 @@ export default class ViewRemediosConsulta extends Component {
         super(props);
         const { state } = this.props.navigation;
         let aux = state.params.remedios ? state.params.remedios : [];
-        this.state = {remedios: aux}
+        this.state = {remedios: [], aux: aux}
     }
 
+    componentWillMount()
+    {
+        this.state.aux.forEach(element => {
+            this.getRemedios(element);
+        });
+    }
+
+    getRemedios(id)
+    {
+        let uri = global.uri + "/remedio/" + id;
+
+        Axios.get(uri)
+        .then((response) => {this.atualiza(response.data)})
+        .catch((err) => alert(err))
+    }
+
+    atualiza(data)
+    {
+        let vetor = this.state.remedios;
+        vetor.push(data);
+        this.setState({remedios: vetor});
+    }
 
     render()
     {

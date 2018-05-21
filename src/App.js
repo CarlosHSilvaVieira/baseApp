@@ -7,11 +7,17 @@ import Home from './home/home';
 
 import Login from './login';
 
+//Medicos Routes
+import MedicosCreate from './medicos/create';
+import MedicosSearch from "./medicos/search";
+
 //Doenças Routes
 import DoencasIndex from './doencas';
 import DoencasCreate from './doencas/create';
 import DoencaView from './doencas/view';
 import DoencaEdit from './doencas/edit';
+import DoencasSearch from './doencas/search';
+import ViewDoencasConsulta from './doencas/viewDoenças';
 
 //Vacinas Routes
 import VacinasIndex from './vacinas';
@@ -23,17 +29,16 @@ import VacinasEdit from './vacinas/edit'
 import RemediosIndex from './remedios';
 import RemediosCreate from './remedios/create';
 import RemediosView from './remedios/view';
-import RemediosEdit from './remedios/edit'
+import RemediosEdit from './remedios/edit';
+import RemediosSearch from './remedios/search';
+import ViewRemediosConsulta from './remedios/viewRemedios';
 
 //Consultas Routes
 import ConsultasIndex from './consultas';
 import ConsultasView from './consultas/view';
 import ConsultasCreate from './consultas/create';
 import ConsultasEdit from './consultas/edit';
-import AddDoencasConsulta from './consultas/addDoencas';
-import AddRemediosConsulta from './consultas/addRemedios';
-import ViewDoencasConsulta from './consultas/viewDoenças';
-import ViewRemediosConsulta from './consultas/viewRemedios';
+
 
 //Week
 import Week from './remedios/week';
@@ -50,10 +55,11 @@ const Drawer = DrawerNavigator(
     VacinasIndex: {screen:VacinasIndex},
     RemediosIndex: {screen: RemediosIndex},
     ConsultasIndex: {screen: ConsultasIndex},
+    
     Login: {screen: Login}
 },
 {
-    initialRouteName: "VacinasIndex",
+    initialRouteName: "ConsultasIndex",
     contentComponent: props => <SideBar {...props} />
 });
 
@@ -67,6 +73,8 @@ const AppNavigator = StackNavigator(
     DoencasCreate: {screen: DoencasCreate},
     DoencaView: {screen: DoencaView},
     DoencaEdit: {screen: DoencaEdit},
+    DoencasSearch: {screen: DoencasSearch},
+    ViewDoencasConsulta: {screen: ViewDoencasConsulta},
 
     VacinasView: {screen: ViewVacinas},
     VacinasCreate: {screen: VacinasCreate},
@@ -77,14 +85,15 @@ const AppNavigator = StackNavigator(
     RemediosCreate: {screen: RemediosCreate},
     RemediosView: {screen: RemediosView},
     RemediosEdit: {screen: RemediosEdit},
+    RemediosSearch: {screen: RemediosSearch},
+    ViewRemediosConsulta: {screen: ViewRemediosConsulta},
 
     ConsultasView: {screen: ConsultasView},
     ConsultasCreate: {screen: ConsultasCreate},
     ConsultasEdit: {screen: ConsultasEdit},
-    AddDoencasConsulta: {screen: AddDoencasConsulta},
-    AddRemediosConsulta: {screen: AddRemediosConsulta},
-    ViewDoencasConsulta: {screen: ViewDoencasConsulta},
-    ViewRemediosConsulta: {screen: ViewRemediosConsulta},
+    
+    MedicosCreate: {screen: MedicosCreate},
+    MedicosSearch: {screen: MedicosSearch},
 
     Hours: {screen: Hours},
     addHour: {screen: addHour}

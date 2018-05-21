@@ -40,7 +40,7 @@ export default class RemediosIndex extends Component {
     {
         if(pacienteId != null)
         {
-            let uri = "http://192.168.0.10:3000/remedios/" + global.paciente._id;
+            let uri = "http://192.168.0.10:3000/remedios/paciente/" + global.paciente._id;
 
             axios.get(uri)
             .then((response) => this.setState({remedios: response.data}))
@@ -80,7 +80,6 @@ export default class RemediosIndex extends Component {
 
     render() 
     {
-        this.getRemedios();
         return(
             <Container>
                 <Header>
