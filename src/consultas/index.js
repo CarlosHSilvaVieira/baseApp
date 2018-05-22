@@ -124,7 +124,13 @@ export default class ConsultasIndex extends Component {
                         leftOpenValue={75}
                         rightOpenValue={-75}
                     />
-                </Content>           
+                </Content>
+                <Fab
+                    style={{ backgroundColor: '#5067FF' }}
+                    position = "bottomRight"
+                    onPress = {() => this.props.navigation.navigate("ConsultasCreate", {addConsulta: this.addConsulta})}>
+                    <Icon name="ios-add" />
+                </Fab>           
             </Container>    
         );
     }
