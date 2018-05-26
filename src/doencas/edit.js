@@ -40,7 +40,9 @@ export default class DoencaEdit extends Component {
     {
         super(props);
         let aux_doenca = this.props.navigation.state.params ? this.props.navigation.state.params.doenca : null;
-        this.state = {nome: aux_doenca.nome, sintomas: aux_doenca.sintomas, dataInicio: new Date(aux_doenca.dataInicio), dataFim: new Date(aux_doenca.dataFim), deonca: aux_doenca};
+        this.state = {nome: aux_doenca.nome, sintomas: aux_doenca.sintomas, 
+            dataInicio: new Date(aux_doenca.dataInicio), dataFim: new Date(aux_doenca.dataFim), 
+            deonca: aux_doenca, _id: aux_doenca._id};
     }
 
     onValueChange(valor)
@@ -50,20 +52,13 @@ export default class DoencaEdit extends Component {
 
     sendRequest()
     {
-        if(this.state.id_paciente != null)
-        {
-            let uri = "http://192.168.0.10:3000/doencas/" + this.state.doenca._id;
+
+        let uri = global.uri + "/doenca/" + this.state._id;
             let doenca_objeto = {nome: this.state.nome, sintomas: this.state.sintomas, dataInicio: this.state.dataInicio, dataFim: this.state.dataFim, paciente: global.paciente._id};
             
-            axios.put(uri,  doenca_objeto)
-            .then((response) => this.onSave(response.data))
-            .catch((error) => console.log(error))
-        }
-        else
-        {
-            alert("não é possivel salvar os dados");
-        }
-        
+        axios.put(uri,  doenca_objeto)
+        .then((response) => this.onSave(response.data))
+        .catch((error) => alert(error))
     }
 
     
@@ -72,7 +67,7 @@ export default class DoencaEdit extends Component {
     {
         this.props.navigation.goBack();
 
-        if(this.props.navigation.state.params.addDoenca)
+        if(this.props.navigation.state.params.updateDoenca)
         {
             this.props.navigation.state.params.updateDoenca(objeto);
         }

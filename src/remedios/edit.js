@@ -58,7 +58,7 @@ export default class RemediosEdit extends Component
 
     atualizar()
     {
-        let uri = "http://192.168.0.10:3000/remedio/" + this.state._id;
+        let uri = global.uri + "/remedio/" + this.state._id;
 
         let remedio = {
             _id: this.state._id, 

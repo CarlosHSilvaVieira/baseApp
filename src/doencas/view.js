@@ -45,7 +45,7 @@ export default class DoencaView extends Component {
 
     deleteDoenca()
     {
-        let uri = "http://192.168.0.10:3000/doenca/" + this.state.doenca._id;
+        let uri = global.uri + "/doenca/" + this.state.doenca._id;
         
         axios.delete(uri)
         .then((response) => this.goBack())

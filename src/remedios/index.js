@@ -25,8 +25,6 @@ import {
 
 import axios from 'axios';  
 
-const pacienteId = "5ae1e6c71162282378693abc";
-
 export default class RemediosIndex extends Component {
     
     constructor(props) 
@@ -38,9 +36,9 @@ export default class RemediosIndex extends Component {
 
     getRemedios()
     {
-        if(pacienteId != null)
+        if(global.paciente._id != null)
         {
-            let uri = "http://192.168.0.10:3000/remedios/paciente/" + global.paciente._id;
+            let uri = global.uri + "/remedios/paciente/" + global.paciente._id;
 
             axios.get(uri)
             .then((response) => this.setState({remedios: response.data}))

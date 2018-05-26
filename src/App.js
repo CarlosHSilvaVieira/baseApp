@@ -59,12 +59,12 @@ const Drawer = DrawerNavigator(
     Login: {screen: Login}
 },
 {
-    initialRouteName: "ConsultasIndex",
+    initialRouteName: "Login",
     contentComponent: props => <SideBar {...props} />
 });
 
-global.paciente = {_id: "5ae1e6c71162282378693abc"};
-global.uri = "http://192.168.0.10:3000";
+//global.paciente = {_id: "5ae1e6c71162282378693abc"};
+global.uri = "http://10.206.83.229:3000";
 
 //rotas especiificas
 const AppNavigator = StackNavigator(

@@ -49,31 +49,20 @@ export default class DoencaCreate extends Component {
 
     sendRequest()
     {
-        if(global.paciente._id != null)
-        {
-            let uri = "http://192.168.0.10:3000/doencas/";
-            let doenca_objeto = {nome: this.state.nome, sintomas: this.state.sintomas, dataInicio: this.state.dataInicio, paciente: global.paciente._id};
-            
-            axios.post(uri,  doenca_objeto)
-            .then((response) => this.onSave(response.data))
-            .catch((error) => console.log(error))
-        }
-        else
-        {
-            alert("não é possivel salvar os dados");
-        }
+        let uri = global.uri + "/doencas";
+        let doenca_objeto = {nome: this.state.nome, sintomas: this.state.sintomas, 
+        dataInicio: this.state.dataInicio, dataFim: this.state.dataFim, paciente: global.paciente._id};
+        
+        axios.post(uri,  doenca_objeto)
+        .then((response) => this.onSave(response.data))
+        .catch((error) => console.log(error))
         
     }
 
     onSave(objeto)
     {
-        console.log(objeto);
         this.props.navigation.goBack();
-
-        if(this.props.navigation.state.params.addDoenca)
-        {
-            this.props.navigation.state.params.addDoenca(objeto);
-        }
+        this.props.navigation.state.params.addDoenca(objeto);
     }
 
 
@@ -124,7 +113,6 @@ export default class DoencaCreate extends Component {
                                     mode='date'
                                     showIcon = {false}
                                     androidMode = "calendar"
-                                    format = "DD-MM-YYYY"
                                     placeholder='select date'
                                     minDate={new Date('1999-01-01')}
                                     maxDate={new Date()}
@@ -141,10 +129,8 @@ export default class DoencaCreate extends Component {
                                     mode='date'
                                     showIcon = {false}
                                     androidMode = "calendar"
-                                    format = "DD-MM-YYYY"
                                     placeholder='select date'
                                     minDate={new Date('1999-01-01')}
-                                    maxDate={new Date()}
                                     confirmBtnText='Confirm'
                                     cancelBtnText='Cancel'
                                     onDateChange={(date) => {this.setState({dataFim: date})}}

@@ -33,12 +33,12 @@ export default class Login extends Component {
 
     login()
     {
-        let uri = "http://192.168.0.10:3000/login/";
+        let uri = "http://10.206.83.229:3000/login/";
         let autenticador = {email: this.state.login, senha: this.state.senha};
 
         axios.post(uri, autenticador)
         .then((response) => this.redirecionar(response.data))
-        .catch((error) => console.log(error));
+        .catch((error) => alert(error));
     }
 
     redirecionar(data)

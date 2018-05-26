@@ -48,7 +48,7 @@ export default class RemediosCreate extends Component
 
     save()
     {
-        let uri = "http://192.168.0.10:3000/remedios/";
+        let uri = global.uri + "/remedios/";
 
         let remedio = {
             nome: this.state.nome, 

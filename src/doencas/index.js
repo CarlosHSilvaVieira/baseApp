@@ -26,8 +26,6 @@ import styles from './styles';
 
 import axios from 'axios';
 
-const pacienteId = "5ae1e6c71162282378693abc";
-
 export default class DoencasIndex extends Component {
 
     constructor(props)
@@ -38,7 +36,7 @@ export default class DoencasIndex extends Component {
     
     getDoencasAsyn()
     {
-        let uri = "http://192.168.0.10:3000/doencas/paciente/" + pacienteId;
+        let uri = global.uri + "/doencas/paciente/" + global.paciente._id;
 
         axios.get(uri)
         .then((response) => this.setState({doencas: response.data}))
@@ -66,7 +64,7 @@ export default class DoencasIndex extends Component {
         this.setState({doencas: vetor});
     }
 
-    componentDidMount()
+    componentWillMount()
     {
         this.getDoencasAsyn();
     }
@@ -104,7 +102,6 @@ export default class DoencasIndex extends Component {
                                     </Text>
                                 </Left>
                                 <Right>
-                                    <Icon name="arrow-forward" style={{ color: "#999" }} />
                                 </Right>
                             </ListItem>}
                     >    
@@ -115,7 +112,7 @@ export default class DoencasIndex extends Component {
                 containerStyle={{ }}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={() => this.props.navigation.navigate("DoencasCreate", {addDoenca: this.addDoenca, pacienteId: pacienteId})}>
+                onPress={() => this.props.navigation.navigate("DoencasCreate", {addDoenca: this.addDoenca})}>
                     <Icon name="ios-add"/>
                 </Fab>   
             </Container>

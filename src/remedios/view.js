@@ -46,7 +46,7 @@ export default class RemediosView extends Component {
 
     deleteRemedio()
     {
-        let uri = "http://192.168.0.10:3000/remedio/" + this.state.remedio._id;
+        let uri = global.uri + "/remedio/" + this.state.remedio._id;
         axios.delete(uri)
         .then((response) => this.goBack())
         .catch((error) => alert(error));
