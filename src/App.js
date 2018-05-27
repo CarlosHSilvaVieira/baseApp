@@ -1,15 +1,15 @@
-import React from "react";
-import { Root } from "native-base";
-import { StackNavigator, DrawerNavigator } from "react-navigation";
+import React from 'react';
+import { Root } from 'native-base';
+import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
-import SideBar from "./sidebar";
+import SideBar from './sidebar';
 import Home from './home/home';
 
 import Login from './login';
 
 //Medicos Routes
 import MedicosCreate from './medicos/create';
-import MedicosSearch from "./medicos/search";
+import MedicosSearch from './medicos/search';
 
 //Doenças Routes
 import DoencasIndex from './doencas';
@@ -23,7 +23,7 @@ import ViewDoencasConsulta from './doencas/viewDoenças';
 import VacinasIndex from './vacinas';
 import ViewVacinas from './vacinas/view';
 import VacinasCreate from './vacinas/create';
-import VacinasEdit from './vacinas/edit'
+import VacinasEdit from './vacinas/edit';
 
 //Remedios Routes 
 import RemediosIndex from './remedios';
@@ -50,58 +50,55 @@ import addHour from './remedios/addHour';
 // rotas gerais
 const Drawer = DrawerNavigator(
 {
-    Home: {screen: Home},
-    DoencasIndex: {screen: DoencasIndex},
-    VacinasIndex: {screen:VacinasIndex},
-    RemediosIndex: {screen: RemediosIndex},
-    ConsultasIndex: {screen: ConsultasIndex},
+    Home: { screen: Home },
+    DoencasIndex: { screen: DoencasIndex },
+    VacinasIndex: { screen: VacinasIndex },
+    RemediosIndex: { screen: RemediosIndex },
+    ConsultasIndex: { screen: ConsultasIndex },
     
-    Login: {screen: Login}
+    Login: { screen: Login }
 },
 {
-    initialRouteName: "Login",
+    initialRouteName: 'Home',
     contentComponent: props => <SideBar {...props} />
 });
-
-//global.paciente = {_id: "5ae1e6c71162282378693abc"};
-global.uri = "http://10.206.83.229:3000";
 
 //rotas especiificas
 const AppNavigator = StackNavigator(
 {
-    Drawer: {screen: Drawer}, 
-    DoencasCreate: {screen: DoencasCreate},
-    DoencaView: {screen: DoencaView},
-    DoencaEdit: {screen: DoencaEdit},
-    DoencasSearch: {screen: DoencasSearch},
-    ViewDoencasConsulta: {screen: ViewDoencasConsulta},
+    Drawer: { screen: Drawer }, 
+    DoencasCreate: { screen: DoencasCreate },
+    DoencaView: { screen: DoencaView },
+    DoencaEdit: { screen: DoencaEdit },
+    DoencasSearch: { screen: DoencasSearch },
+    ViewDoencasConsulta: { screen: ViewDoencasConsulta },
 
-    VacinasView: {screen: ViewVacinas},
-    VacinasCreate: {screen: VacinasCreate},
-    VacinasEdit: {screen: VacinasEdit},
+    VacinasView: { screen: ViewVacinas },
+    VacinasCreate: { screen: VacinasCreate },
+    VacinasEdit: { screen: VacinasEdit },
 
-    Week: {screen: Week},
+    Week: { screen: Week },
 
-    RemediosCreate: {screen: RemediosCreate},
-    RemediosView: {screen: RemediosView},
-    RemediosEdit: {screen: RemediosEdit},
-    RemediosSearch: {screen: RemediosSearch},
-    ViewRemediosConsulta: {screen: ViewRemediosConsulta},
+    RemediosCreate: { screen: RemediosCreate },
+    RemediosView: { screen: RemediosView },
+    RemediosEdit: { screen: RemediosEdit },
+    RemediosSearch: { screen: RemediosSearch },
+    ViewRemediosConsulta: { screen: ViewRemediosConsulta },
 
-    ConsultasView: {screen: ConsultasView},
-    ConsultasCreate: {screen: ConsultasCreate},
-    ConsultasEdit: {screen: ConsultasEdit},
+    ConsultasView: { screen: ConsultasView },
+    ConsultasCreate: { screen: ConsultasCreate },
+    ConsultasEdit: { screen: ConsultasEdit },
     
-    MedicosCreate: {screen: MedicosCreate},
-    MedicosSearch: {screen: MedicosSearch},
+    MedicosCreate: { screen: MedicosCreate },
+    MedicosSearch: { screen: MedicosSearch },
 
-    Hours: {screen: Hours},
-    addHour: {screen: addHour}
+    Hours: { screen: Hours },
+    addHour: { screen: addHour }
 
 },
 {
-    initialRouteName: "Drawer",
-    headerMode: "none"
+    initialRouteName: 'Drawer',
+    headerMode: 'none'
 });
 
 export default () =>

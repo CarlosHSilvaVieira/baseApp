@@ -1,43 +1,38 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
+import { Dimensions } from 'react-native';
 
 import {
     Container,
     Header,
     Title,
-    Content,
     Button,
     Icon,
     Left,
     Right,
     Body,
-    List,
-    ListItem,
-    Text,
-    Grid,
-    Col,
-    Row,
-    Thumbnail,
-    H3
-  } from "native-base";
+    Content
+  } from 'native-base';
 
-import DoencasIndex from '../doencas';
-import VacinasIndex from '../vacinas';
+import MapView from 'react-native-maps';
 
-const foto_usuario = require('../../assets/user.jpg');
+//const fotosuario = require('../../assets/user.jpg');
 
 export default class Home extends Component {
 
-    render()
-    {
-        return(
+    constructor(props) {
+        super(props);
+        this.state = { dimensions: undefined };
+    }
+
+    render() {
+        return (
             <Container>
                 <Header>
                     <Left>
                         <Button
                         transparent
-                        onPress={() => this.props.navigation.navigate("DrawerOpen")}
+                        onPress={() => this.props.navigation.navigate('DrawerOpen')}
                         >
                         <Icon name='menu' />
                         </Button>
@@ -47,17 +42,21 @@ export default class Home extends Component {
                     </Body>
                     <Right />
                 </Header>   
-                <Grid>
-                    <Col style={styles.container}>
-                        <Thumbnail large style={styles.thumbnail} circular={true} source={foto_usuario}/>
-                        <Text>
-                            <H3>Bem vindo!!!</H3>
-                        </Text>    
-                        <Text style={styles.text}>
-                            Mentenha atualizado seu histórico médico
-                        </Text>                        
-                    </Col>
-                </Grid>         
+                <Content>
+                <MapView
+                    style={{ width: Dimensions.get('window').width, height: (Dimensions.get('window').height - 80) }}
+                    showsUserLocation
+                    zoomControlEnabled
+                    zoomEnabled
+                    customMapStyle={[]}    
+                    initialRegion={{
+                    latitude: 37.78825,
+                    longitude: -122.4324,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                    }}
+                />
+                </Content>             
             </Container> 
         );
     }
