@@ -1,25 +1,17 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
-    Icon,
     Left,
     Right,
-    Body,
     Text,
     Form,
     Label,
-    Input,
     Item,
-    List,
-    ListItem,
-    CheckBox,
-    Textarea
-  } from "native-base";
+  } from 'native-base';
 
 import DatePicker from 'react-native-datepicker';
 
@@ -27,21 +19,18 @@ import styles from './styles';
 
 export default class addHour extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state = {hora: '11:00'};
+        this.state = { hora: '11:00' };
     }
 
-    onSave()
-    {
+    onSave() {
         this.props.navigation.goBack();
-        this.props.navigation.state.params.addHora(this.state.hora)
+        this.props.navigation.state.params.addHora(this.state.hora);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                 <Header>
                     <Left>
@@ -57,7 +46,7 @@ export default class addHour extends Component {
                         <Button
                             transparent
                             onPress={() => this.onSave()}
-                            >
+                        >
                             <Text>Salvar</Text>
                             </Button>
                     </Right>
@@ -70,12 +59,12 @@ export default class addHour extends Component {
                                 style={styles.datePicker}
                                 date={this.state.hora}
                                 mode='time'
-                                showIcon = {false}
-                                is24Hour = {true}
-                                androidMode = "spinner"
+                                showIcon={false}
+                                is24Hour
+                                androidMode="spinner"
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({hora: date})}}
+                                onDateChange={(date) => { this.setState({ hora: date }); }}
                             />
                         </Item>
                     </Form>    

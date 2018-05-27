@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import styles from '../style/styles';
-
 import { ListView } from 'react-native';
 
 import {
@@ -17,38 +15,29 @@ import {
     ListItem,
     Text,
     Fab,
-    Tabs,
-    Grid,
-    Col,
-    Row,
-    H3,
     Title
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
 export default class ConsultasIndex extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state = {consultas: []};
+        this.state = { consultas: [] };
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     }
 
-    getAll()
-    {
-        let uri = global.uri + "/consultas/" + global.paciente._id;
+    getAll() {
+        const uri = '/consultas/paciente/';
 
-        axios.get(uri)
-        .then((resposta) => this.setState({consultas: resposta.data}))
-        .catch((error) => alert(error));
+        const valor = request.getByPaciente(uri, global.paciente._id);
+        valor.then((resposta) => this.setState({ consultas: resposta }));
     }
 
-    componentWillMount()
-    {
+    /*componentWillMount() {
         this.getAll();
-    }
+    }*/
 
     /*houldComponentUpdate()
     {
@@ -56,38 +45,33 @@ export default class ConsultasIndex extends Component {
         return true;
     }*/
 
-    deletarConsulta(data)
-    {
-        let uri = global.uri + "/consulta/" + data._id;
+    deletarConsulta(data) {
+        const uri = '/consulta/';
 
-        axios.delete(uri)
-        .then((resposta) => console.log(resposta.data))
-        .catch((error) => alert(error));
+        const valor = request.delete(uri, data._id);
+        valor.then((resposta) => alert(resposta));
     }
 
-    deleteRow(secId, rowId, rowMap, data) 
-    {
+    deleteRow(secId, rowId, rowMap, data) {
         rowMap[`${secId}${rowId}`].props.closeRow();
         const newData = [...this.state.consultas];
         newData.splice(rowId, 1);
-        this.setState({consultas: newData});
+        this.setState({ consultas: newData });
 
         this.deletarConsulta(data);
     }
 
-    addConsulta = (consulta) =>
-    {
-
-    }
-
-    render()
-    {
-        return(
+    render() {
+        this.getAll();
+        return (
             <Container>
                 <Header>
                     <Left>
-                        <Button transparent onPress = {() => this.props.navigation.navigate("DrawerOpen")}>
-                            <Icon name = "menu" />
+                        <Button 
+                            transparent 
+                            onPress={() => this.props.navigation.navigate('DrawerOpen')}
+                        >
+                            <Icon name="menu" />
                         </Button>
                     </Left>
                     <Body>
@@ -97,27 +81,37 @@ export default class ConsultasIndex extends Component {
                 </Header>
                 <Content>  
                     <List
-                        dataSource = {this.ds.cloneWithRows(this.state.consultas)}
-
+                        dataSource={this.ds.cloneWithRows(this.state.consultas)}
                         pagingEnabled
-
                         scrollEnabled
-
-                        renderRow = {(consulta) => 
+                        renderRow={(consulta) => 
                             <ListItem >
-                                <Body><Text>{consulta.local}</Text></Body>
-                                <Right><Text>{new Date(consulta.data).toLocaleDateString()}</Text></Right>
+                                <Body>
+                                    <Text>{consulta.local}</Text>
+                                </Body>
+                                <Right>
+                                    <Text>{new Date(consulta.data).toLocaleDateString()}</Text>
+                                </Right>
                             </ListItem>    
                         }
 
                         renderLeftHiddenRow={(data) =>
-                            <Button full onPress={() => this.props.navigation.navigate("ConsultasView", {consulta: data})}>
+                            <Button 
+                                full 
+                                onPress={
+                                    () => this.props.navigation.navigate('ConsultasView', 
+                                    { consulta: data })}
+                            >
                                 <Icon active name="information-circle" />
                             </Button>
                         }
                         
                         renderRightHiddenRow={(data, sectionId, rowId, rowMap) => 
-                            <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap, data)}>
+                            <Button 
+                                full 
+                                danger 
+                                onPress={_ => this.deleteRow(sectionId, rowId, rowMap, data)}
+                            >
                                 <Icon active name="trash" />
                             </Button>
                         }
@@ -127,8 +121,11 @@ export default class ConsultasIndex extends Component {
                 </Content>
                 <Fab
                     style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomRight"
-                    onPress = {() => this.props.navigation.navigate("ConsultasCreate", {addConsulta: this.addConsulta})}>
+                    position="bottomRight"
+                    onPress={
+                        () => this.props.navigation.navigate('ConsultasCreate', 
+                        { addConsulta: this.addConsulta })}
+                >
                     <Icon name="ios-add" />
                 </Fab>           
             </Container>    

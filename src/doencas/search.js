@@ -1,95 +1,74 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
     Icon,
-    Left,
-    Right,
-    Body,
     Text,
-    Form,
-    Label,
     Input,
     Item,
     List,
-    CheckBox,
-    Thumbnail,
-    Footer
-  } from "native-base";
+  } from 'native-base';
 
-import MyListItem from '../components/List/ListItem/listItem';
+import MyListItem from '../components/list/listItem/listItem';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
-import styles from '../style/styles';
-
-export default class DoencasSearch extends Component
-{
-    constructor(props)
-    {
+export default class DoencasSearch extends Component {
+    
+    constructor(props) {
         super(props);
-        this.state = {nome: '', doencas: [], selecionadas: []};
+        this.state = { nome: '', doencas: [], selecionadas: [] };
     }
 
-    pesquisar()
-    {
-        let uri = global.uri + "/doencas/" + this.state.nome;
-        axios.get(uri)
-        .then((resposta) => {this.setState({doencas: resposta.data})})
-        .catch((erro) => alert(erro))
-    }
-
-    voltar()
-    {
-        this.props.navigation.goBack();
-
-        if(this.props.navigation.state.params)
-        {
-            this.props.navigation.state.params.onAddDoencas(this.state.selecionadas);
-        }
-    }
-
-    getSelecionado = (selecionado, objeto) =>
-    {
-        if(selecionado == true)
-        {
+    getSelecionado = (selecionado, objeto) => {
+        if (selecionado === true) {
             this.adicionaSelecionado(objeto);
-        }
-        else
-        {
+        } else {
             this.removeSelecionado(objeto);
         }
     }
 
-    adicionaSelecionado(objeto)
-    {
+    pesquisar() {
+        const local = '/doencas/';
+        const valor = request.get(local.concat(this.state.nome));
+        valor.then((resposta) => { this.setState({ doencas: resposta }); });
+    }
+
+    backPage() {
+        if (this.props.navigation.state.params) {
+            this.props.navigation.state.params.onAddDoencas(this.state.selecionadas);
+        }
+        this.props.navigation.goBack();
+    }
+
+    adicionaSelecionado(objeto) {
         this.state.selecionadas.push(objeto);
     }
 
-    removeSelecionado(objeto)
-    {
-        let index = this.state.selecionadas.indexOf(objeto);
+    removeSelecionado(objeto) {
+        const index = this.state.selecionadas.indexOf(objeto);
         this.state.selecionadas.splice(index, 1);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                 <Header searchBar rounded>
                     <Item>
                         <Button
                             transparent
-                            onPress={() => this.voltar()}
-                            >
+                            onPress={() => this.backPage()}
+                        >
                             <Icon name="arrow-back" />
                         </Button>
-                        <Icon name="ios-search"/>
-                        <Input placeholder="Digite o nome da doença" onChangeText={(text) => {this.setState({nome: text})}}/>
+                        <Icon name="ios-search" />
+                        <Input 
+                            placeholder="Digite o nome da doença" 
+                            onChangeText={(text) => { this.setState({ nome: text }); }} 
+                        />
                         <Button onPress={() => this.pesquisar()}>
                             <Text>Pesquisar</Text>
                         </Button>
@@ -100,14 +79,13 @@ export default class DoencasSearch extends Component
                         dataArray={this.state.doencas} 
                         pagingEnabled
                         scrollEnabled
-
-                        renderRow={(doenca, sectionID, rowId) => 
-                        {
-                            return(
-                                <MyListItem objeto={doenca} retornaSelecionado={this.getSelecionado}/>
-                            ); 
-                        }   
-                    }/>   
+                        renderRow={(doenca) => 
+                            <MyListItem 
+                                objeto={doenca} 
+                                retornaSelecionado={this.getSelecionado} 
+                            />  
+                        } 
+                    />   
                 </Content>    
             </Container>    
         );

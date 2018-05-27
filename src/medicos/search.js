@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
     Icon,
@@ -11,60 +10,51 @@ import {
     Right,
     Body,
     Text,
-    Form,
-    Label,
     Input,
     Item,
     List,
     ListItem,
-    CheckBox,
     Thumbnail,
-    Footer
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
-import styles from '../style/styles';
-
-export default class MedicosSearch extends Component
-{
-    constructor(props)
-    {
+export default class MedicosSearch extends Component {
+    
+    constructor(props) {
         super(props);
-        this.state = {crm: '', medicos: []};
+        this.state = { crm: '', medicos: [] };
     }
 
-    pesquisar()
-    {
-        let uri = global.uri + "/medicos/" + this.state.crm;
-        axios.get(uri)
-        .then((resposta) => {this.setState({medicos: resposta.data})})
-        .catch((erro) => alert(erro))
+    pesquisar() {
+        const uri = '/medicos/';
+        const valor = request.get(uri.concat(this.state.crm));
+        valor.then((resposta) => { this.setState({ medicos: resposta }); });
     }
 
-    selecionarMedico(dados)
-    {
-        if(this.props.navigation.state.params)
-        {
+    selecionarMedico(dados) {
+        if (this.props.navigation.state.params) {
             this.props.navigation.goBack();
             this.props.navigation.state.params.getMedicoSelecionado(dados);
         }
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                 <Header searchBar rounded>
                     <Item>
                         <Button
                             transparent
                             onPress={() => this.props.navigation.goBack()}
-                            >
+                        >
                             <Icon name="arrow-back" />
                         </Button>
-                        <Icon name="ios-search"/>
-                        <Input placeholder="Digite o CRM" onChangeText={(text) => {this.setState({crm: text})}}/>
+                        <Icon name="ios-search" />
+                        <Input 
+                            placeholder="Digite o CRM" 
+                            onChangeText={(text) => { this.setState({ crm: text }); }} 
+                        />
                         <Button onPress={() => this.pesquisar()}>
                             <Text>Pesquisar</Text>
                         </Button>
@@ -72,9 +62,14 @@ export default class MedicosSearch extends Component
                 </Header>
                 <Content>
                     <List
-                    dataArray={this.state.medicos} 
-                         renderRow={(medico) => 
-                        <ListItem avatar selected button onPress={() => this.selecionarMedico(medico)}>
+                        dataArray={this.state.medicos} 
+                        renderRow={(medico) => 
+                        <ListItem 
+                            avatar 
+                            selected 
+                            button 
+                            onPress={() => this.selecionarMedico(medico)}
+                        >
                             <Left>
                                 <Thumbnail source={{ uri: '../../assets/user.jpg' }} />
                             </Left>

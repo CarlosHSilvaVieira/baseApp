@@ -1,67 +1,51 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
-
 import {
     Content,
-    Button,
-    Icon,
-    Left,
-    Right,
-    Body,
     List,
     ListItem,
-    Text,
-    Tab,
-    Tabs,
-    Grid,
-    Col,
-    Row,
-    H3
-  } from "native-base";
+    Text
+  } from 'native-base';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
 export default class VacinasReinforce extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state = {reforcar: []};
+        this.state = { reforcar: [] };
     }
 
-    getVacinasReforcar()
-    {
-        let uri = global.uri + "/vacinas/reforcar/"+ global.paciente._id;
-        axios.get(uri)
-        .then((response) => {this.setState({reforcar: response.data})})
-        .catch((error) => alert(error))
-    }
-
-    componentWillMount()
-    {
+    componentWillMount() {
         this.getVacinasReforcar();
     }
 
-    shouldComponentUpdate()
-    {
+    shouldComponentUpdate() {
         this.getVacinasReforcar();
         return true;
     }
 
-    render()
-    {
-        return(
+    getVacinasReforcar() {
+        const uri = '/vacinas/paciente/reforcar/';
+        const valor = request.getByPaciente(uri, global.paciente._id);
+        valor.then((response) => { this.setState({ reforcar: response }); });
+    }
+
+    render() {
+        return (
             <Content>
-                <List dataArray={this.state.reforcar}
+                <List 
+                    dataArray={this.state.reforcar}
                     renderRow={(item) =>                        
-                        <ListItem button
-                        onPress = {() => this.props.navigation.navigate("VacinasEdit", {vacina: item})}>
+                        <ListItem 
+                            button
+                            onPress={() => this.props.navigation.navigate('VacinasEdit', 
+                            { vacina: item })} 
+                        >
                             <Text>{item.nome}</Text>
                         </ListItem>    
-                    }>
-                </List>
-                
+                    }
+                />
             </Content>    
         );
     }

@@ -1,93 +1,74 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
     Icon,
-    Left,
-    Right,
-    Body,
     Text,
-    Form,
-    Label,
     Input,
     Item,
     List,
-  } from "native-base";
+  } from 'native-base';
 
-import MyListItem from '../components/List/ListItem/listItem';
+import MyListItem from '../components/list/listItem/listItem';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
-import styles from '../style/styles';
-
-export default class RemediosSearch extends Component
-{
-    constructor(props)
-    {
+export default class RemediosSearch extends Component {
+    
+    constructor(props) {
         super(props);
-        this.state = {nome: '', remedios: [], selecionadas: []};
+        this.state = { nome: '', remedios: [], selecionadas: [] };
     }
 
-    pesquisar()
-    {
-        let uri = global.uri + "/remedios/" + this.state.nome;
-        axios.get(uri)
-        .then((resposta) => {this.setState({remedios: resposta.data})})
-        .catch((erro) => alert(erro))
-    }
-
-    getSelecionado = (selecionado, objeto) =>
-    {
-        if(selecionado == true)
-        {
+    getSelecionado = (selecionado, objeto) => {
+        if (selecionado === true) {
             this.adicionaSelecionado(objeto);
-        }
-        else
-        {
+        } else {
             this.removeSelecionado(objeto);
         }
     }
 
-    adicionaSelecionado(objeto)
-    {
+    pesquisar() {
+        const uri = '/remedios/';
+        const valor = request.get(uri.concat(this.state.nome));
+        valor.then((resposta) => { this.setState({ remedios: resposta }); });
+    }
+
+    adicionaSelecionado(objeto) {
         this.state.selecionadas.push(objeto);
     }
 
-    removeSelecionado(objeto)
-    {
-        let index = this.state.selecionadas.indexOf(objeto);
+    removeSelecionado(objeto) {
+        const index = this.state.selecionadas.indexOf(objeto);
         this.state.selecionadas.splice(index, 1);
     }
 
-
-    voltar()
-    {
-        this.props.navigation.goBack();
-
-        if(this.props.navigation.state.params)
-        {
+    voltar() {
+        if (this.props.navigation.state.params) {
             this.props.navigation.state.params.onAddRemedios(this.state.selecionadas);
         }
+        this.props.navigation.goBack();
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                 <Header searchBar rounded>
                     <Item>
                         <Button
                             transparent
                             onPress={() => this.voltar()}
-                            >
+                        >
                             <Icon name="arrow-back" />
                         </Button>
-                        <Icon name="ios-search"/>
-                        <Input placeholder="Digite o nome do remedio" onChangeText={(text) => {this.setState({nome: text})}}/>
+                        <Icon name="ios-search" />
+                        <Input
+                            placeholder="Digite o nome do remedio" 
+                            onChangeText={(text) => { this.setState({ nome: text }); }} 
+                        />
                         <Button onPress={() => this.pesquisar()}>
                             <Text>Pesquisar</Text>
                         </Button>
@@ -98,12 +79,11 @@ export default class RemediosSearch extends Component
                         pagingEnabled
                         scrollEnabled
 
-                        dataArray = {this.state.remedios}
-                        renderRow = {(row, sectionId, rowId) => 
-                        {
-                            return(<MyListItem objeto={row} retornaSelecionado={this.getSelecionado} />);
+                        dataArray={this.state.remedios}
+                        renderRow={(row) => 
+                            <MyListItem objeto={row} retornaSelecionado={this.getSelecionado} />
                         }
-                    }/>   
+                    />   
                 </Content>    
             </Container>    
         );

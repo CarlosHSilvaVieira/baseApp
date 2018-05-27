@@ -1,15 +1,12 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
-    Icon,
     Left,
     Right,
-    Body,
     Text,
     Form,
     Label,
@@ -17,64 +14,53 @@ import {
     Item,
     List,
     ListItem,
-    CheckBox,
-    Textarea
-  } from "native-base";
+  } from 'native-base';
 
 import styles from '../style/styles';
-import Axios from "axios";
+
+import * as request from '../components/request';
 
 export default class ConsultasView extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         const { state } = this.props.navigation;
-        let aux = state.params ? state.params.consulta : null;
-        this.state = {consulta : aux, medico: {especialidades: []}};
+        const aux = state.params ? state.params.consulta : null;
+        this.state = { consulta: aux, medico: { especialidades: [] } };
     }
 
-    componentWillMount()
-    {
+    componentWillMount() {
         this.getMedico();
     }
-
-    onDaysChange = (data) =>
-    {
-        this.setState(data);
+    
+    getMedico() {
+        const uri = '/medico/';
+        const valor = request.get(uri.concat(this.state.consulta.medico));
+        valor.then((resposta) => { this.setState({ medico: resposta }); });
     }
 
-    updateConsulta = (dados) => 
-    {
-        this.setState({consulta: dados});
+    updateConsulta = (dados) => {
+        this.setState({ consulta: dados });
     }
 
-    getMedico()
-    {
-        let uri = global.uri + "/medico/"+ this.state.consulta.medico;
-        Axios.get(uri)
-        .then((resposta) => {this.setState({medico: resposta.data})})
-        .catch((error) => alert(error))
-    }
-
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                  <Header>
                     <Left>
                         <Button
                             transparent
                             onPress={() => this.props.navigation.goBack()}
-                            >
+                        >
                             <Text>Voltar</Text>
                         </Button>
                     </Left>
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("ConsultasEdit", {consulta: this.state.consulta, updateConsulta: this.updateConsulta})}
-                            >
+                            onPress={() => this.props.navigation.navigate('ConsultasEdit', 
+                            { consulta: this.state.consulta, updateConsulta: this.updateConsulta })}
+                        >
                             <Text>Editar</Text>
                         </Button>
                     </Right>   
@@ -87,7 +73,11 @@ export default class ConsultasView extends Component {
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data</Label>
-                            <Input disabled><Text>{new Date(this.state.consulta.data).toLocaleDateString()}</Text></Input>   
+                            <Input disabled>
+                                <Text>
+                                    {new Date(this.state.consulta.data).toLocaleDateString()}
+                                </Text>
+                            </Input>   
                         </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Medico</Label>
@@ -100,24 +90,41 @@ export default class ConsultasView extends Component {
                         <Item inlineLabel style={styles.item}>
                             <Label>Especialidades</Label>
                             <List 
-                            dataArray={this.state.medico.especialidades} 
-                            renderRow = {(especialidade) =>
-                                <ListItem>
-                                    <Text>{especialidade}</Text>
-                                </ListItem>    
-                            }/>
+                                dataArray={this.state.medico.especialidades} 
+                                renderRow={(especialidade) =>
+                                    <ListItem>
+                                        <Text>{especialidade}</Text>
+                                    </ListItem>    
+                                }
+                            />
                         </Item> 
-                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewDoencasConsulta", {doencas: this.state.consulta.doencas})} >
+                        <Item 
+                            inlineLabel 
+                            style={styles.item} 
+                            onPress={() => this.props.navigation.navigate('ViewDoencasConsulta', 
+                            { doencas: this.state.consulta.doencas })} 
+                        >
                             <Label>Doença</Label>
-                            <Input disabled  value={this.state.consulta.doencas.length + " doenças"} />   
+                            <Input 
+                                disabled 
+                                value={this.state.consulta.doencas.length + ' doenças'} 
+                            />   
                         </Item>
-                        <Item inlineLabel style={styles.item} onPress={() => this.props.navigation.navigate("ViewRemediosConsulta", {remedios: this.state.consulta.remedios})}>
+                        <Item 
+                            inlineLabel 
+                            style={styles.item} 
+                            onPress={() => this.props.navigation.navigate('ViewRemediosConsulta', 
+                            { remedios: this.state.consulta.remedios })}
+                        >
                             <Label>Remedios</Label>
-                            <Input disabled  value={this.state.consulta.remedios.length + " remedios"} />    
+                            <Input 
+                                disabled 
+                                value={this.state.consulta.remedios.length + ' remedios'} 
+                            />    
                         </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Detalhes</Label>
-                            <Input disabled value={this.state.consulta.detalhes}></Input>  
+                            <Input disabled value={this.state.consulta.detalhes} />
                         </Item>
                     </Form>
                 </Content>    

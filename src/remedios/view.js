@@ -1,15 +1,13 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 import {
     Container,
     Header,
-    Title,
     Content,
     Button,
     Icon,
     Left,
     Right,
-    Body,
     Text,
     Form,
     Label,
@@ -17,65 +15,64 @@ import {
     Item,
     List,
     ListItem,
-    CheckBox,
-    Textarea,
     Fab
-  } from "native-base";
+  } from 'native-base';
+
+import DatePicker from 'react-native-datepicker';  
   
-import axios from 'axios';
-  
-import DatePicker from 'react-native-datepicker';
+import * as request from '../components/request';
 
 import styles from './styles';
 
 export default class RemediosView extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         const { state } = this.props.navigation;
-        let aux_remedio = state.params ? state.params.remedio : null;
-        this.state = {remedio : aux_remedio, dataInicio: aux_remedio.dataInicio, dataFim: aux_remedio.dataFim};
+        const auxRemedio = state.params ? state.params.remedio : null;
+        this.state = { 
+            remedio: auxRemedio, 
+            dataInicio: auxRemedio.dataInicio, 
+            dataFim: auxRemedio.dataFim };
     }
 
-    updateRemedio = (aux_remedio) =>
-    {
-        console.log(aux_remedio);
-        this.setState({remedio: aux_remedio, dataInicio: aux_remedio.dataInicio, dataFim: aux_remedio.dataFim});
+    updateRemedio = (auxRemedio) => {
+        this.setState({ 
+            remedio: auxRemedio, 
+            dataInicio: auxRemedio.dataInicio, 
+            dataFim: auxRemedio.dataFim });
     }
 
-    deleteRemedio()
-    {
-        let uri = global.uri + "/remedio/" + this.state.remedio._id;
-        axios.delete(uri)
-        .then((response) => this.goBack())
-        .catch((error) => alert(error));
+    deleteRemedio() {
+        const local = '/remedio/';
+        const valor = request.delete(local, this.state.remedio._id);
+        valor.then((resposta) => this.goBack(resposta));
     }
     
-    goBack()
-    {
+    goBack(resp) {
+        alert(resp);
         this.props.navigation.goBack();
-        this.props.navigation.state.params.deleteRemedio(this.state.remedio);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                  <Header>
                     <Left>
                         <Button
                             transparent
                             onPress={() => this.props.navigation.goBack()}
-                            >
-                            <Text>Voltar</Text>
+                        >
+                            <Icon name='arrow-back' />
                         </Button>
                     </Left> 
                     <Right>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("RemediosEdit", {remedio: this.state.remedio, updateRemedio: this.updateRemedio})}
-                            >
+                            onPress={
+                                () => this.props.navigation.navigate('RemediosEdit', 
+                                { remedio: this.state.remedio, updateRemedio: this.updateRemedio })}
+                        >
                             <Text>Editar</Text>
                         </Button>
                     </Right>   
@@ -87,15 +84,19 @@ export default class RemediosView extends Component {
                             <Input disabled><Text>{this.state.remedio.nome}</Text></Input>   
                         </Item> 
                         <Item inlineLabel style={styles.item}>
+                            <Label>Detalhes</Label>
+                            <Input disabled><Text>{this.state.remedio.detalhes}</Text></Input>   
+                        </Item> 
+                        <Item inlineLabel style={styles.item}>
                             <Label>Data de inicio da medicação</Label>
                             <DatePicker
                                 style={styles.datePicker}
                                 date={this.state.dataInicio}
-                                disabled = {true}
+                                disabled
                                 mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                is24Hour = {true}
+                                showIcon={false}
+                                androidMode="calendar"
+                                is24Hour
                             />
                         </Item>
                         <Item inlineLabel style={styles.item}>
@@ -103,18 +104,18 @@ export default class RemediosView extends Component {
                             <DatePicker
                                 style={styles.datePicker}
                                 date={this.state.dataFim}
-                                disabled = {true}
+                                disabled
                                 mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                is24Hour = {true}
+                                showIcon={false}
+                                androidMode="calendar"
+                                is24Hour
                             /> 
                         </Item>
                         <Item inlineLabel style={styles.item}>
                             <Label>Horário da medicação</Label>
                             <List
-                                dataArray = {this.state.remedio.horarios}
-                                renderRow = {(hora) =>
+                                dataArray={this.state.remedio.horarios}
+                                renderRow={(hora) =>
                                     <ListItem>
                                         <Text>{hora}</Text>
                                     </ListItem>    
@@ -124,8 +125,8 @@ export default class RemediosView extends Component {
                         <Item inlineLabel style={styles.item}>
                             <Label>Dias da medicação</Label>
                             <List
-                                dataArray = {this.state.remedio.dias}
-                                renderRow = {(dia) =>
+                                dataArray={this.state.remedio.dias}
+                                renderRow={(dia) =>
                                     <ListItem>
                                         <Text>{dia}</Text>
                                     </ListItem> 
@@ -136,8 +137,9 @@ export default class RemediosView extends Component {
                 </Content>    
                 <Fab
                     style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomRight"
-                    onPress = {() => this.deleteRemedio()}>
+                    position="bottomRight"
+                    onPress={() => this.deleteRemedio()}
+                >
                     <Icon name="ios-trash" />
                 </Fab> 
             </Container>    

@@ -33,18 +33,17 @@ export default class Hours extends Component
     {
         super(props);
         const {state} = this.props.navigation;
-        let aux_horarios = state.params ? state.params.horarios : null;
+        let aux_horarios = state.params ? state.params.horarios : [];
         this.state = { horarios: aux_horarios };
-
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     }
 
     deleteRow(secId, rowId, rowMap) 
     {
         rowMap[`${secId}${rowId}`].props.closeRow();
-        const newData = [...this.state.doencas];
+        const newData = [...this.state.horarios];
         newData.splice(rowId, 1);
-        this.setState({ doencas: newData });
+        this.setState({ horarios: newData });
     }
 
     onBack()

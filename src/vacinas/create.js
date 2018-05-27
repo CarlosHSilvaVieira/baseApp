@@ -1,6 +1,4 @@
-import React, { Component } from "react";
-
-import {Slider} from 'react-native';
+import React, { Component } from 'react';
 
 import {
     Container,
@@ -13,52 +11,48 @@ import {
     Right,
     Body,
     Text,
-    Grid,
-    Col,
-    Row,
-    H1,
     Form,
     Label,
     Input,
     Item,
     Switch
-  } from "native-base";
+  } from 'native-base';
 
 import DatePicker from 'react-native-datepicker';
-import moment from 'moment';
 
 import styles from './styles';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
-export default class VacinaCreate extends Component
-{
-    constructor(props)
-    {
+export default class VacinaCreate extends Component {
+    
+    constructor(props) {
         super(props);
-        this.state = {nome: "", data: "", dataReforco: "", reforco: false};
+        this.state = { nome: '', data: new Date(), dataReforco: new Date(), reforco: false };
     }
 
-    onSave()
-    {
-        let uri = global.uri + "/vacinas" ;
+    onSave() {
+        const uri = '/vacinas';
 
-        let dados = {data: this.state.data, nome: this.state.nome, reforco: this.state.reforco, dataReforco: this.state.dataReforco, paciente: global.paciente._id};
+        const dados = { 
+            data: this.state.data, 
+            nome: this.state.nome, 
+            reforco: this.state.reforco, 
+            dataReforco: this.state.dataReforco, 
+            paciente: global.paciente._id
+        };
 
-        axios.post(uri, dados)
-        .then((response) => this.goBack(response.data))
-        .catch((error) => alert(error))
+        const valor = request.post(uri, dados);
+        valor.then((response) => this.goBack(response.data));
     }
 
-    goBack(resposta)
-    {
+    goBack(resposta) {
         this.props.navigation.goBack();
         this.props.navigation.state.params.addVacina(resposta);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                  <Header>
                     <Left>
@@ -76,7 +70,7 @@ export default class VacinaCreate extends Component
                     <Button
                         transparent
                         onPress={() => this.onSave()}
-                        >
+                    >
                             <Text>Salvar</Text>
                         </Button>
                     </Right>
@@ -86,33 +80,39 @@ export default class VacinaCreate extends Component
                     <Form style={styles.form}>
                         <Item inlineLabel style={styles.item}>
                             <Label>Nome</Label>
-                            <Input onChangeText={(texto) => this.setState({nome: texto})} />
+                            <Input onChangeText={(texto) => this.setState({ nome: texto })} />
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data da vacinação</Label>
                             <Left />
                             <Body />
-                            <Right><DatePicker
-                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
-                                style={styles.datePicker}
-                                date={this.state.data}
-                                mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                placeholder='selecione'
-                                minDate={new Date('1999-01-01')}
-                                maxDate={new Date()}
-                                confirmBtnText='Confirm'
-                                cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({data: date})}}
-                            />
+                            <Right>
+                                <DatePicker
+                                    customStyles={{ dateInput: 
+                                        { borderWidth: 1, borderRadius: 20 } }}
+                                    style={styles.datePicker}
+                                    date={this.state.data}
+                                    mode='date'
+                                    showIcon={false}
+                                    androidMode="calendar"
+                                    placeholder='selecione'
+                                    minDate={new Date('1999-01-01')}
+                                    maxDate={new Date()}
+                                    confirmBtnText='Confirm'
+                                    cancelBtnText='Cancel'
+                                    onDateChange={(date) => { this.setState({ data: date }); }}
+                                />
                             </Right>
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Necessita de refoço</Label>
                             <Left />
                             <Body>
-                                <Switch style={styles.switch} value={this.state.reforco} onValueChange={(novo) => this.setState({reforco: novo})} /> 
+                                <Switch 
+                                    style={styles.switch} 
+                                    value={this.state.reforco} 
+                                    onValueChange={(novo) => this.setState({ reforco: novo })} 
+                                /> 
                             </Body>  
                             <Right />
                         </Item>  
@@ -120,20 +120,23 @@ export default class VacinaCreate extends Component
                             <Label>Reforço</Label>
                             <Left />
                             <Body />
-                            <Right><DatePicker
-                                customStyles={{dateInput: {borderWidth: 1, borderRadius: 20}}}
-                                style={styles.datePicker}
-                                disabled={!this.state.reforco}
-                                date={this.state.dataReforco}
-                                mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
-                                placeholder='selecione'
-                                minDate={new Date()}
-                                confirmBtnText='Confirm'
-                                cancelBtnText='Cancel'
-                                onDateChange={(date) => {this.setState({dataReforco: date})}}
-                            />
+                            <Right>
+                                <DatePicker
+                                    customStyles={{ dateInput: 
+                                        { borderWidth: 1, borderRadius: 20 } }}
+                                    style={styles.datePicker}
+                                    disabled={!this.state.reforco}
+                                    date={this.state.dataReforco}
+                                    mode='date'
+                                    showIcon={false}
+                                    androidMode="calendar"
+                                    placeholder='selecione'
+                                    minDate={new Date()}
+                                    confirmBtnText='Confirm'
+                                    cancelBtnText='Cancel'
+                                    onDateChange={
+                                        (date) => { this.setState({ dataReforco: date }); }}
+                                />
                             </Right>
                         </Item> 
                     </Form>    

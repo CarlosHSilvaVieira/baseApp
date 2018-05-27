@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { ListView } from 'react-native';
+//import { ListView } from 'react-native';
 
 import {
     Container,
@@ -13,30 +13,20 @@ import {
     Right,
     Body,
     Text,
-    Form,
-    Label,
-    Input,
-    Item,
     List,
     ListItem,
-    CheckBox,
-    Textarea
-  } from "native-base";
-
-import styles from './styles';
-import Axios from "axios";
+  } from 'native-base';
 
 export default class ViewDoencasConsulta extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         const { state } = this.props.navigation;
-        let aux = state.params.doencas ? state.params.doencas : [];
-        this.state = {doencas: [], aux: aux}
+        const aux = state.params.doencas ? state.params.doencas : [];
+        this.state = { doencas: aux };
     }
 
-    componentWillMount()
+    /*componentWillMount()
     {
         this.state.aux.forEach(element => {
             this.getDoencas(element);
@@ -57,19 +47,18 @@ export default class ViewDoencasConsulta extends Component {
         let vetor = this.state.doencas;
         vetor.push(data);
         this.setState({doencas: vetor});
-    }
+    }*/
 
-    render()
-    {
-        console.log(this.state.doencas)
-        return(
+    render() {
+        console.log(this.state.doencas);
+        return (
             <Container>
                  <Header>
                     <Left>
                         <Button
                             transparent
                             onPress={() => this.props.navigation.goBack()}
-                            >
+                        >
                             <Icon name="arrow-back" />
                         </Button>
                     </Left>
@@ -80,8 +69,8 @@ export default class ViewDoencasConsulta extends Component {
                 </Header>
                 <Content>
                     <List
-                        dataArray = {this.state.doencas}
-                        renderRow = {(data) =>
+                        dataArray={this.state.doencas}
+                        renderRow={(data) =>
                             <ListItem>
                                 <Text> {data.nome} </Text>
                             </ListItem>

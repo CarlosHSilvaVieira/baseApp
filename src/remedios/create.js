@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 import {
     Container,
@@ -15,64 +15,57 @@ import {
     Label,
     Input,
     Item,
-    List,
-    ListItem,
-    CheckBox,
-    Textarea
-  } from "native-base";
+  } from 'native-base';
 
 import DatePicker from 'react-native-datepicker';
 
-import axios from 'axios';
+import * as request from '../components/request';
 
 import styles from './styles';
-import Week from './week';
 
-export default class RemediosCreate extends Component
-{
-    constructor(props)
-    {
+export default class RemediosCreate extends Component {
+    
+    constructor(props) {
         super(props);
-        this.state = {nome: "", bula: "", dataInicio: new Date(), dataFim: new Date(), horarios: [], dias: []};
+        this.state = { 
+            nome: '', 
+            bula: '', 
+            dataInicio: new Date(), 
+            dataFim: new Date(), 
+            horarios: [], 
+            dias: [] };
     }
 
-    onDaysChange = (data) =>
-    {
-        this.setState({dias: data});
+    onDaysChange = (data) => {
+        this.setState({ dias: data });
     }
 
-    onAddHoras = (horas) =>
-    {
-        this.setState({horarios: horas});
+    onAddHoras = (horas) => {
+        this.setState({ horarios: horas });
     }
 
-    save()
-    {
-        let uri = global.uri + "/remedios/";
-
-        let remedio = {
+    save() {
+        const remedio = {
             nome: this.state.nome, 
-            bula: this.state.bula, 
+            detalhes: this.state.detalhes, 
             dataInicio: new Date(this.state.dataInicio),
             dataFim: new Date(this.state.dataFim),
             horarios: this.state.horarios,
             dias: this.state.dias,
-            paciente: global.paciente._id};  
+            paciente: global.paciente._id
+        };  
 
-        axios.post(uri, remedio)
-        .then((response) => this.goBack(response.data))
-        .catch((error) => alert(error));
+        request.post('/remedios', remedio)
+        .then((response) => this.goBack(response));
     }
 
-    goBack(data)
-    {
-        this.props.navigation.goBack();
+    goBack(data) {
         this.props.navigation.state.params.addRemedio(data);
+        this.props.navigation.goBack();
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container>
                  <Header>
                     <Left>
@@ -90,7 +83,7 @@ export default class RemediosCreate extends Component
                         <Button
                             transparent
                             onPress={() => this.save()}
-                            >
+                        >
                             <Text>Salvar</Text>
                             </Button>
                     </Right>
@@ -99,11 +92,15 @@ export default class RemediosCreate extends Component
                     <Form style={styles.form}>
                         <Item inlineLabel style={styles.item}>
                             <Label>Nome</Label>
-                            <Input onChangeText = {(texto) => {this.setState({nome: texto})}} />   
+                            <Input 
+                                onChangeText={(texto) => { this.setState({ nome: texto }); }} 
+                            />   
                         </Item> 
                         <Item inlineLabel style={styles.item}>
-                            <Label>Bula</Label>
-                            <Input onChangeText = {(texto) => {this.setState({bula: texto})}} />   
+                            <Label>Detalhes</Label>
+                            <Input 
+                                onChangeText={(texto) => { this.setState({ detalhes: texto }); }} 
+                            />   
                         </Item> 
                         <Item inlineLabel style={styles.item}>
                             <Label>Data de inicio da medicação</Label>
@@ -111,15 +108,15 @@ export default class RemediosCreate extends Component
                                 style={styles.datePicker}
                                 date={this.state.dataInicio}
                                 mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
+                                showIcon={false}
+                                androidMode="calendar"
                                 placeholder='select date'
                                 minDate={new Date('2016-05-01')}
                                 maxDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                is24Hour = {true}
-                                onDateChange={(date) => {this.setState({dataInicio: date})}}
+                                is24Hour
+                                onDateChange={(date) => { this.setState({ dataInicio: date }); }}
                             />
                         </Item>  
                         <Item inlineLabel style={styles.item}>
@@ -128,26 +125,38 @@ export default class RemediosCreate extends Component
                                 style={styles.datePicker}
                                 date={this.state.dataFim}
                                 mode='date'
-                                showIcon = {false}
-                                androidMode = "calendar"
+                                showIcon={false}
+                                androidMode="calendar"
                                 placeholder='select date'
                                 minDate={new Date('2016-05-01')}
-                                maxDate={new Date()}
                                 confirmBtnText='Confirm'
                                 cancelBtnText='Cancel'
-                                is24Hour = {true}
-                                onDateChange={(date) => {this.setState({dataFim: date})}}
+                                is24Hour
+                                onDateChange={(date) => { this.setState({ dataFim: date }); }}
                             />
                         </Item>  
 
                         <Item inlineLabel style={styles.item}>
                             <Label>Horário da medicação</Label>
-                            <Button transparent onPress = {() => this.props.navigation.navigate("Hours", {onAddHoras: this.onAddHoras, horarios: this.state.horarios})}><Text>{this.state.horarios.length + " horários"}</Text></Button>
+                            <Button 
+                                transparent 
+                                onPress={() => 
+                                this.props.navigation.navigate('Hours', 
+                                { onAddHoras: this.onAddHoras, horarios: this.state.horarios })}
+                            >
+                                <Text>{ this.state.horarios.length + ' horários'}</Text>
+                            </Button>
                         </Item>
 
                         <Item inlineLabel style={styles.item}>
                             <Label>Dias da medicação</Label>
-                            <Button transparent onPress = {() => this.props.navigation.navigate("Week", {onDaysChange: this.onDaysChange, dias: this.state.dias})}><Text>{this.state.dias.length + " dias"}</Text></Button>
+                            <Button 
+                                transparent 
+                                onPress={() => this.props.navigation.navigate('Week', 
+                                { onDaysChange: this.onDaysChange, dias: this.state.dias })}
+                            >
+                                <Text>{this.state.dias.length + ' dias'}</Text>
+                            </Button>
                         </Item>
                     </Form>
                 </Content>    

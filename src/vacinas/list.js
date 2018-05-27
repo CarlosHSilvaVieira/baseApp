@@ -1,85 +1,75 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
-
 import {
     Content,
-    Button,
     Icon,
-    Left,
-    Right,
-    Body,
     List,
     ListItem,
     Text,
-    Tab,
-    Tabs,
-    Grid,
-    Col,
-    Row,
-    H3,
     Fab,
     Container
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';  
+import * as request from '../components/request';
 
 export default class ListVacinas extends Component {
-
-    constructor(props)
-    {
+    
+    constructor(props) {
         super(props);
-        this.state = {vacinas: []};
+        this.state = { vacinas: [] };
     }
 
-    componentWillMount()
-    {
+    componentWillMount() {
         this.getVacinas();
     }
 
-    getVacinas()
-    {
-        let uri = global.uri + "/vacinas/"+ global.paciente._id;
-        axios.get(uri)
-        .then((response) => {this.setState({vacinas: response.data})})
-        .catch((error) => alert(error))
+    getVacinas() {
+        const uri = '/vacinas/paciente/';
+        const valor = request.getByPaciente(uri, global.paciente._id);
+        valor.then((response) => { this.setState({ vacinas: response }); });
     }
 
-    addVacina = (dados) =>
-    {
-        let vetor = this.state.vacinas;
+    addVacina = (dados) => {
+        const vetor = this.state.vacinas;
         vetor.push(dados);
-        this.setState({vacinas: vetor});
+        this.setState({ vacinas: vetor });
     }
 
-    deleteVacina = (vacina) =>
-    {
-        let vetor = this.state.vacinas;
-        let index = vetor.indexOf(vacina);
+    deleteVacina = (vacina) => {
+        const vetor = this.state.vacinas;
+        const index = vetor.indexOf(vacina);
         vetor.splice(index, 1);
-        this.setState({vacinas: vetor});
+        this.setState({ vacinas: vetor });
     }
 
-    render()
-    {
-        return(
+    render() {
+        this.getVacinas();
+        return (
             <Container>
                 <Content>
-                    <List dataArray={this.state.vacinas}
+                    <List 
+                        dataArray={this.state.vacinas}
                         renderRow={(item) =>                        
-                            <ListItem button
-                            onPress = {() => this.props.navigation.navigate("VacinasView", {vacina: item, deleteVacina: this.deleteVacina})}>
+                            <ListItem 
+                            button
+                            onPress={
+                                () => this.props.navigation.navigate('VacinasView', 
+                                { vacina: item, deleteVacina: this.deleteVacina })} 
+                            >
                                 <Text>{item.nome}</Text>
                             </ListItem>    
-                        }>
-                    </List>
+                        }
+                    />
                 </Content>    
                 <Fab
                 containerStyle={{ }}
                 style={{ backgroundColor: '#5067FF' }}
                 position="bottomRight"
-                onPress={() => this.props.navigation.navigate("VacinasCreate", {addVacina: this.addVacina})}>
-                    <Icon name="ios-add"/>
+                onPress={
+                    () => this.props.navigation.navigate('VacinasCreate',
+                     { addVacina: this.addVacina })}
+                >
+                    <Icon name="ios-add" />
                 </Fab>
             </Container>    
         );

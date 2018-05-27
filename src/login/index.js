@@ -1,84 +1,73 @@
 import React, { Component } from 'react';
 
-import {ImageBackground, View, StatusBar, TextInput} from 'react-native';
-
-import styles from './styles';
+import { ImageBackground, View } from 'react-native';
 
 import {
     Container,
     Button,
     Text, 
     Input,
-    H1,
-    Card,
-    CardItem,
-    Body,
     Content,
     Form,
     Item,
-    Label
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';  
-  
-const imagem_fundo = require('../../assets/launchscreen-bg.png');
+import * as request from '../components/request';
+
+import styles from './styles';
+
+const imagemFundo = require('../../assets/launchscreen-bg.png');
 
 export default class Login extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state = {login: '', senha: ''};
+        this.state = { login: '', senha: '' };
     }
 
-    login()
-    {
-        let uri = "http://10.206.83.229:3000/login/";
-        let autenticador = {email: this.state.login, senha: this.state.senha};
-
-        axios.post(uri, autenticador)
-        .then((response) => this.redirecionar(response.data))
-        .catch((error) => alert(error));
+    login() {
+        const valor = request.login(this.state.login, this.state.senha);
+        valor.then((retorno) => { this.redirecionar(retorno); })
+        .catch((erro) => { console.log(erro); });
     }
 
-    redirecionar(data)
-    {
-        if(data.length > 0)
-        {
+    redirecionar(data) {
+        if (data.length > 0) {
             global.paciente = data[0];
-            this.props.navigation.navigate("Home");
-        }
-        else
-        {
-            alert("login errado");
+
+            this.props.navigation.navigate('Home');
+        } else {
+            console.log('login errado');
         }
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container style={styles.container}>
-            <ImageBackground source={imagem_fundo} style={styles.imageContainer}></ImageBackground>
+            <ImageBackground source={imagemFundo} style={styles.imageContainer} />
             <Content>
                     <Form>
                         <Item>
-                            <Input placeholder="email"  onChangeText={(texto) => this.setState({login: texto})} />
+                            <Input 
+                                placeholder="Email" 
+                                onChangeText={(texto) => this.setState({ login: texto })} 
+                            />
                         </Item>    
                         <Item>
-                            <Input placeholder="Senha" value={this.state.senha} secureTextEntry={true} onChangeText={(texto) => this.setState({senha: texto})} />
+                            <Input 
+                                placeholder="Senha" 
+                                value={this.state.senha} 
+                                secureTextEntry 
+                                onChangeText={(texto) => this.setState({ senha: texto })} 
+                            />
                         </Item>    
                     </Form>    
                     <View style={styles.view}>
-                        <Button rounded warning
-                            style={styles.button}
-                            onPress={() => this.props.navigation.navigate("DrawerOpen")}
-                            >
-                            <Text>Cadastrar</Text>
-                        </Button>
-                        <Button rounded
-                            style={{ backgroundColor: "#6FAF98", alignSelf: "center" }}
+                        <Button 
+                            rounded block
+                            style={{ backgroundColor: '#6FAF98', alignSelf: 'center' }}
                             onPress={() => this.login()}
-                            >
+                        >
                             <Text>Entrar</Text>
                         </Button>  
                     </View>    

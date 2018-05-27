@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
-
 import {
     Container,
     Header,
@@ -15,77 +13,59 @@ import {
     ListItem,
     Text,
     Fab,
-    Tabs,
-    Grid,
-    Col,
-    Row,
-    H3,
     Title
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';  
+import * as request from '../components/request';
 
 export default class RemediosIndex extends Component {
     
-    constructor(props) 
-    {
+    constructor(props) {
         super(props);
-        let id_paciente = this.props.navigation.state.params ? this.props.navigation.state.params.id_paciente : null;
-        this.state = {remedios: [], id_paciente: id_paciente};
+        const idPaciente = this.props.navigation.state.params ? 
+        this.props.navigation.state.params.id_paciente : null;
+
+        this.state = { remedios: [], id_paciente: idPaciente };
     }
-
-    getRemedios()
-    {
-        if(global.paciente._id != null)
-        {
-            let uri = global.uri + "/remedios/paciente/" + global.paciente._id;
-
-            axios.get(uri)
-            .then((response) => this.setState({remedios: response.data}))
-            .catch((erro) => alert(erro));
-        }
-        else
-        {
-            alert("erro ao buscar os remédios do usuário");
-        }
-    }
-
+    
     /*shouldComponentUpdate()
     {
         this.getRemedios();
         return true;
     }*/
 
-    componentWillMount()
-    {
+    /*componentWillMount() {
         this.getRemedios();
+    }*/
+
+    getRemedios() {
+        const valor = request.getByPaciente('/remedios/paciente/', global.paciente._id);
+        valor.then((response) => this.setState({ remedios: response }));
     }
 
-    addRemedio = (data) =>
-    {
-        let vetor = this.state.remedios;
+    addRemedio = (data) => {
+        const vetor = this.state.remedios;
         vetor.push(data);
-        this.setState({remedios: vetor});
+        this.setState({ remedios: vetor });
     }
 
-    deleteRemedio = (data) =>
-    {
-        let vetor = this.state.remedios;
-        let index = vetor.indexOf(data);
+    deleteRemedio = (data) => {
+        const vetor = this.state.remedios;
+        const index = vetor.indexOf(data);
         vetor.splice(index, 1);
-        this.setState({remedios: vetor});
+        this.setState({ remedios: vetor });
     }
 
-    render() 
-    {
-        return(
+    render() {
+        this.getRemedios();
+        return (
             <Container>
                 <Header>
                     <Left>
                         <Button
                             transparent
-                            onPress={() => this.props.navigation.navigate("DrawerOpen")}
-                            >
+                            onPress={() => this.props.navigation.navigate('DrawerOpen')}
+                        >
                             <Icon name='menu' />
                         </Button>
                     </Left>
@@ -97,18 +77,26 @@ export default class RemediosIndex extends Component {
                 <Content>  
                     <List
                         dataArray={this.state.remedios}
-                        renderRow = {(remedio) => 
-                            <ListItem button
-                                onPress = {() => this.props.navigation.navigate("RemediosView", {remedio: remedio, deleteRemedio: this.deleteRemedio})}>
-                                <Text>{remedio.nome}</Text>
+                        renderRow={(remedioAux) => 
+                            <ListItem 
+                                button
+                                onPress={
+                                    () => this.props.navigation.navigate('RemediosView', 
+                                    { remedio: remedioAux, deleteRemedio: this.deleteRemedio })}
+                            >
+                                <Text>{remedioAux.nome}</Text>
                             </ListItem>    
-                        }>
-                    </List>   
+                        }
+                    />  
                 </Content>   
                 <Fab
                     style={{ backgroundColor: '#5067FF' }}
-                    position = "bottomRight"
-                    onPress = {() => this.props.navigation.navigate("RemediosCreate", {addRemedio: this.addRemedio})}>
+                    position="bottomRight"
+                    onPress={
+                        () => this.props.navigation.navigate('RemediosCreate', 
+                        { addRemedio: this.addRemedio })
+                    }
+                >
                     <Icon name="ios-add" />
                 </Fab>      
             </Container>    

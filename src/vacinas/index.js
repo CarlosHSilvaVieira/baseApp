@@ -1,51 +1,38 @@
 import React, { Component } from 'react';
 
-import styles from './styles';
-
 import {
     Container,
     Header,
     Title,
-    Content,
     Button,
     Icon,
     Left,
     Right,
     Body,
-    List,
-    ListItem,
-    Text,
     Tab,
     Tabs,
-    Grid,
-    Col,
-    Row,
-    H3,
-    Fab
-  } from "native-base";
+  } from 'native-base';
 
-import axios from 'axios';
+import styles from './styles';
 
 import ListVacinas from './list';  
 import VacinasReinforce from './reinforce';
 
 export default class VacinasIndex extends Component {
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.state = {pagina: 0, vacinas: [], reforcar: []}
+        this.state = { pagina: 0 };
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <Container style={styles.container}>
                 <Header hasTabs>
                     <Left>
                         <Button
                         transparent
-                        onPress={() => this.props.navigation.navigate("DrawerOpen")}
+                        onPress={() => this.props.navigation.navigate('DrawerOpen')}
                         >
                         <Icon name='menu' />
                         </Button>
@@ -57,10 +44,10 @@ export default class VacinasIndex extends Component {
                 </Header>
                 <Tabs initialPage={this.state.pagina}>
                      <Tab heading="Minha lista">
-                        <ListVacinas navigation={this.props.navigation}/>
+                        <ListVacinas navigation={this.props.navigation} />
                     </Tab> 
                     <Tab heading="Reforçar">
-                        <VacinasReinforce navigation={this.props.navigation}/>
+                        <VacinasReinforce navigation={this.props.navigation} />
                     </Tab>
                 </Tabs> 
             </Container>    
