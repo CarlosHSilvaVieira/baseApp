@@ -74,7 +74,7 @@ class SideBar extends Component {
     return (
       <Container>
         <Content
-          bounces={false}
+          bounces
           style={{ flex: 1, backgroundColor: "#fff", top: -1 }}
         >
           <Image source={drawerCover} style={styles.drawerCover} />
@@ -110,7 +110,9 @@ class SideBar extends Component {
                     >
                       <Text
                         style={styles.badgeText}
-                      >{`${data.types} Types`}</Text>
+                      >
+                        {`${data.types} Types`}
+                      </Text>
                     </Badge>
                   </Right>}
               </ListItem>}

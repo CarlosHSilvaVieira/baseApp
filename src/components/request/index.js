@@ -2,6 +2,18 @@ var axios = require('axios')
 
 const uri = "http://192.168.0.10:3000"
 
+exports.getAllPoints = async function() 
+{
+    var endereco = uri + "/geocentros";
+    var retorno = {};
+
+    await axios.get(endereco)
+    .then((response) => {retorno = response.data})
+    .catch((err) => alert(err));
+
+    return retorno;
+}
+
 exports.login = async function(login, senha)
 {
     let autenticador = {email: login, senha: senha};

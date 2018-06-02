@@ -14,15 +14,24 @@ import {
     Content
   } from 'native-base';
 
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
-//const fotosuario = require('../../assets/user.jpg');
+import * as request from '../components/request';
 
 export default class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { dimensions: undefined };
+        this.state = { dimensions: undefined, dados: [] };
+    }
+
+    componentWillMount() {
+        this.getAllPoints();
+    }
+
+    getAllPoints() {
+        const valor = request.getAllPoints();
+        valor.then((resposta) => { this.setState({ dados: resposta }); });
     }
 
     render() {
@@ -43,19 +52,28 @@ export default class Home extends Component {
                     <Right />
                 </Header>   
                 <Content>
-                <MapView
-                    style={{ width: Dimensions.get('window').width, height: (Dimensions.get('window').height - 80) }}
-                    showsUserLocation
-                    zoomControlEnabled
-                    zoomEnabled
-                    customMapStyle={[]}    
-                    initialRegion={{
-                    latitude: 37.78825,
-                    longitude: -122.4324,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                    }}
-                />
+                    <MapView
+                        style={{ width: Dimensions.get('window').width, 
+                        height: (Dimensions.get('window').height - 80) }}
+                        showsUserLocation
+                        zoomControlEnabled
+                        zoomEnabled
+                        customMapStyle={[]}    
+                        initialRegion={{
+                        latitude: -19.8157,
+                        longitude: -43.954219,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                        }}
+                    >
+                        {this.state.dados.map((marker, index) => (
+                            <Marker
+                            key={index}
+                            coordinate={marker.latlong}
+                            title={marker.nom_estab}
+                            />
+                        ))}
+                    </MapView>
                 </Content>             
             </Container> 
         );
