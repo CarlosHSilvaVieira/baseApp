@@ -9,7 +9,19 @@ exports.getAllPoints = async function()
 
     await axios.get(endereco)
     .then((response) => {retorno = response.data})
-    .catch((err) => alert(err));
+    .catch((err) => { alert("Não foi possivel achar os dados"); retorno = [] });
+
+    return retorno;
+}
+
+exports.getAllFarmacias = async function() 
+{
+    var endereco = uri + "/farmacias";
+    var retorno = {};
+
+    await axios.get(endereco)
+    .then((response) => {retorno = response.data})
+    .catch((err) => { alert("Não foi possivel achar os dados"); retorno = [] });
 
     return retorno;
 }

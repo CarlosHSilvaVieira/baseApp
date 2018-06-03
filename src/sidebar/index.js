@@ -32,8 +32,7 @@ const datas = [
     name: "Vacinas",
     route: "VacinasIndex",
     icon: "phone-portrait",
-    bg: "#477EEA",
-    types: "10"
+    bg: "#477EEA"
   },
   {
     name: "Remedios",
@@ -50,12 +49,6 @@ const datas = [
   {
     name: "Monitoramento",
     route: "Monitoramento",
-    icon: "phone-portrait",
-    bg: "#477EEA"
-  },
-  {
-    name: "Perfil",
-    route: "Perfil",
     icon: "phone-portrait",
     bg: "#477EEA"
   },

@@ -18,6 +18,8 @@ import MapView, { Marker } from 'react-native-maps';
 
 import * as request from '../components/request';
 
+import MyMap from '../components/myMap';
+
 export default class Home extends Component {
 
     constructor(props) {
@@ -25,9 +27,9 @@ export default class Home extends Component {
         this.state = { dimensions: undefined, dados: [] };
     }
 
-    componentWillMount() {
+    /*componentWillMount() {
         this.getAllPoints();
-    }
+    }*/
 
     getAllPoints() {
         const valor = request.getAllPoints();
@@ -51,30 +53,7 @@ export default class Home extends Component {
                     </Body>
                     <Right />
                 </Header>   
-                <Content>
-                    <MapView
-                        style={{ width: Dimensions.get('window').width, 
-                        height: (Dimensions.get('window').height - 80) }}
-                        showsUserLocation
-                        zoomControlEnabled
-                        zoomEnabled
-                        customMapStyle={[]}    
-                        initialRegion={{
-                        latitude: -19.8157,
-                        longitude: -43.954219,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                        }}
-                    >
-                        {this.state.dados.map((marker, index) => (
-                            <Marker
-                            key={index}
-                            coordinate={marker.latlong}
-                            title={marker.nom_estab}
-                            />
-                        ))}
-                    </MapView>
-                </Content>             
+                <MyMap />          
             </Container> 
         );
     }

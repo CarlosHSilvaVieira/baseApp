@@ -47,6 +47,9 @@ import Week from './remedios/week';
 import Hours from './remedios/hours';
 import addHour from './remedios/addHour';
 
+//MapSideBar
+import DrawerMap from './components/mapSideBar/drawerMap';
+
 // rotas gerais
 const Drawer = DrawerNavigator(
 {
@@ -67,6 +70,8 @@ const Drawer = DrawerNavigator(
 const AppNavigator = StackNavigator(
 {
     Drawer: { screen: Drawer }, 
+    MapSideBar: { screen: DrawerMap },
+
     DoencasCreate: { screen: DoencasCreate },
     DoencaView: { screen: DoencaView },
     DoencaEdit: { screen: DoencaEdit },
