@@ -2,34 +2,29 @@ export default {
     container: 
     {
         flex: 1,
+        backgroundColor: '#fff'
     },
     content: 
     {
-        flexDirection: 'row',
+        flex: 1,
+        flexDirection: 'column',
     },
     imageContainer: 
     {
-        flex: 1,
-        width: null,
-        height: null,
-    },
-    view: 
-    {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    texto: 
-    {
-        color: 'white',
-        fontSize: 15
+        alignSelf: 'center',
+        width: 120,
+        height: 120,
+        marginVertical: 50,
     },
     item: 
     {
-        marginHorizontal: 10,
+        marginVertical: 10,
+        marginLeft: 5,
     },
     button:
     {
-        marginVertical: 10,
-        marginHorizontal: 10,
+        backgroundColor: '#6FAF98', 
+        alignSelf: 'center', 
+        marginVertical: 10
     }
-}
+};

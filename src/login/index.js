@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ImageBackground, View } from 'react-native';
+import { Image, View } from 'react-native';
 
 import {
     Container,
@@ -16,7 +16,7 @@ import * as request from '../components/request';
 
 import styles from './styles';
 
-const imagemFundo = require('../../assets/launchscreen-bg.png');
+const imagemFundo = require('../../assets/hospital_256.png');
 
 export default class Login extends Component {
 
@@ -44,34 +44,40 @@ export default class Login extends Component {
     render() {
         return (
             <Container style={styles.container}>
-            <ImageBackground source={imagemFundo} style={styles.imageContainer} />
-            <Content>
+            <Image source={imagemFundo} style={styles.imageContainer} />
+            <Content style={styles.content}>
                     <Form>
-                        <Item>
+                        <Item 
+                            rounded
+                            underline={false}
+                            style={styles.item}
+                        >
                             <Input 
                                 placeholder="Email" 
                                 onChangeText={(texto) => this.setState({ login: texto })} 
                             />
                         </Item>    
-                        <Item>
+                        <Item 
+                            rounded
+                            underline={false}
+                            style={styles.item}
+                        >
                             <Input 
                                 placeholder="Senha" 
                                 value={this.state.senha} 
                                 secureTextEntry 
                                 onChangeText={(texto) => this.setState({ senha: texto })} 
                             />
-                        </Item>    
+                        </Item>  
                     </Form>    
-                    <View style={styles.view}>
-                        <Button 
-                            rounded block
-                            style={{ backgroundColor: '#6FAF98', alignSelf: 'center' }}
-                            onPress={() => this.login()}
-                        >
-                            <Text>Entrar</Text>
-                        </Button>  
-                    </View>    
-                    
+                    <Button 
+                        rounded 
+                        block
+                        style={styles.button}
+                        onPress={() => this.login()}
+                    >
+                        <Text>Entrar</Text>
+                    </Button>
                 </Content>       
         </Container>   
         );

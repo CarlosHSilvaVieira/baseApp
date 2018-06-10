@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { Dimensions } from 'react-native';
-
 import {
     Container,
     Header,
@@ -11,10 +9,8 @@ import {
     Left,
     Right,
     Body,
-    Content
   } from 'native-base';
 
-import MapView, { Marker } from 'react-native-maps';
 
 import * as request from '../components/request';
 

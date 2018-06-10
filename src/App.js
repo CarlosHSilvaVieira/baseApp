@@ -2,7 +2,7 @@ import React from 'react';
 import { Root } from 'native-base';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
-import SideBar from './sidebar';
+import SideBar from './components/sidebar';
 import Home from './home/home';
 
 import Login from './login';
@@ -47,9 +47,6 @@ import Week from './remedios/week';
 import Hours from './remedios/hours';
 import addHour from './remedios/addHour';
 
-//MapSideBar
-import DrawerMap from './components/mapSideBar/drawerMap';
-
 // rotas gerais
 const Drawer = DrawerNavigator(
 {
@@ -62,7 +59,7 @@ const Drawer = DrawerNavigator(
     Login: { screen: Login }
 },
 {
-    initialRouteName: 'Home',
+    initialRouteName: 'Login',
     contentComponent: props => <SideBar {...props} />
 });
 
@@ -70,7 +67,6 @@ const Drawer = DrawerNavigator(
 const AppNavigator = StackNavigator(
 {
     Drawer: { screen: Drawer }, 
-    MapSideBar: { screen: DrawerMap },
 
     DoencasCreate: { screen: DoencasCreate },
     DoencaView: { screen: DoencaView },
