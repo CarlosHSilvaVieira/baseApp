@@ -10,6 +10,7 @@ import {
     Content,
     Form,
     Item,
+    H3,
   } from 'native-base';
 
 import * as request from '../components/request';
@@ -46,6 +47,7 @@ export default class Login extends Component {
             <Container style={styles.container}>
             <Image source={imagemFundo} style={styles.imageContainer} />
             <Content style={styles.content}>
+                <H3 style={styles.text} >Health Monitor</H3>
                     <Form>
                         <Item 
                             rounded
@@ -78,6 +80,9 @@ export default class Login extends Component {
                     >
                         <Text>Entrar</Text>
                     </Button>
+                    <View>
+                        <Text style={styles.text} >Cadastrar-se</Text>
+                    </View>    
                 </Content>       
         </Container>   
         );

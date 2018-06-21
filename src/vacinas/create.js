@@ -28,7 +28,7 @@ export default class VacinaCreate extends Component {
     
     constructor(props) {
         super(props);
-        this.state = { nome: '', data: new Date(), dataReforco: new Date(), reforco: false };
+        this.state = { nome: '', data: new Date(), dataReforco: null, reforco: false };
     }
 
     onSave() {

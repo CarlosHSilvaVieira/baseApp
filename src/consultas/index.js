@@ -49,7 +49,7 @@ export default class ConsultasIndex extends Component {
         const uri = '/consulta/';
 
         const valor = request.delete(uri, data._id);
-        valor.then((resposta) => alert(resposta));
+        valor.then();
     }
 
     deleteRow(secId, rowId, rowMap, data) {
@@ -123,8 +123,7 @@ export default class ConsultasIndex extends Component {
                     style={{ backgroundColor: '#5067FF' }}
                     position="bottomRight"
                     onPress={
-                        () => this.props.navigation.navigate('ConsultasCreate', 
-                        { addConsulta: this.addConsulta })}
+                        () => this.props.navigation.navigate('ConsultasCreate')}
                 >
                     <Icon name="ios-add" />
                 </Fab>           

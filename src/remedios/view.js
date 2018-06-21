@@ -50,7 +50,6 @@ export default class RemediosView extends Component {
     }
     
     goBack(resp) {
-        alert(resp);
         this.props.navigation.goBack();
     }
 

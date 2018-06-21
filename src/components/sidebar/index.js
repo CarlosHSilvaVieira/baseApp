@@ -88,7 +88,7 @@ class SideBar extends Component {
               </Left>
               <Body>
                 
-                <Text style={styles.userName} >global.paciente.email</Text>
+                <Text style={styles.userName}>paciente</Text>
               </Body>
               <Right>
                 <Button 

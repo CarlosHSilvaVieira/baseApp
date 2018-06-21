@@ -26,5 +26,8 @@ export default {
         backgroundColor: '#6FAF98', 
         alignSelf: 'center', 
         marginVertical: 10
+    },
+    text: {
+        alignSelf: 'center',
     }
 };
